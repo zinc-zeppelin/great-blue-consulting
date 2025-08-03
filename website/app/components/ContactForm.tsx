@@ -1,27 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-
 export default function ContactForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    service: '',
-    message: ''
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Form will be handled by Netlify's form handling
-  };
 
   return (
     <section id="contact" className="py-20 bg-gray-50">
@@ -37,7 +16,7 @@ export default function ContactForm() {
           name="contact" 
           method="POST" 
           data-netlify="true"
-          onSubmit={handleSubmit}
+          action="/success"
           className="bg-white rounded-lg shadow-md p-8"
         >
           <input type="hidden" name="form-name" value="contact" />
@@ -52,8 +31,6 @@ export default function ContactForm() {
                 id="name"
                 name="name"
                 required
-                value={formData.name}
-                onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
               />
             </div>
@@ -67,8 +44,6 @@ export default function ContactForm() {
                 id="email"
                 name="email"
                 required
-                value={formData.email}
-                onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
               />
             </div>
@@ -82,8 +57,6 @@ export default function ContactForm() {
               type="text"
               id="company"
               name="company"
-              value={formData.company}
-              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
             />
           </div>
@@ -95,8 +68,6 @@ export default function ContactForm() {
             <select
               id="service"
               name="service"
-              value={formData.service}
-              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
             >
               <option value="">Select a service</option>
@@ -118,8 +89,6 @@ export default function ContactForm() {
               name="message"
               rows={4}
               required
-              value={formData.message}
-              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
             ></textarea>
           </div>

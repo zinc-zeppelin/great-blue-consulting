@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forms</title>
+</head>
+<body>
+  <!-- This file helps Netlify detect forms in Next.js apps -->
+  <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="text" name="company" />
+    <select name="service">
+      <option value="">Select a service</option>
+      <option value="ai-automation">AI Automation</option>
+      <option value="custom-agents">Custom AI Agents</option>
+      <option value="process-optimization">Process Optimization</option>
+      <option value="integration">Integration Services</option>
+      <option value="strategy">AI Strategy Consulting</option>
+      <option value="training">Training & Support</option>
+    </select>
+    <textarea name="message"></textarea>
+  </form>
+</body>
+</html>
