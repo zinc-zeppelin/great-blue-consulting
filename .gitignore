@@ -1,0 +1,60 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+venv/
+*.pyc
+__pycache__/
+
+# Build outputs
+dist/
+build/
+.next/
+.nuxt/
+.astro/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Docker
+docker-compose.override.yml
+
+# n8n
+n8n-data/
+
+# Metabase
+metabase-data/
+
+# Credentials and secrets
+*.pem
+*.key
+*.crt
+credentials/
+secrets/
+
+# Backup files
+*.backup
+*.bak
+backups/
+
+# Obsidian
+.obsidian/
+.trash/
+
+# OS
+Thumbs.db
+.DS_Store

@@ -1,0 +1,14 @@
+# DigitalOcean API Token
+do_token = "your_digitalocean_api_token"
+
+# Region (nyc1, nyc3, sfo3, ams3, sgp1, lon1, fra1, tor1, blr1)
+region = "nyc3"
+
+# Droplet size
+# Basic: s-1vcpu-1gb ($6/mo)
+# Standard: s-2vcpu-4gb ($24/mo)
+# Production: s-4vcpu-8gb ($48/mo)
+droplet_size = "s-2vcpu-4gb"
+
+# Your domain name
+domain_name = "pineaiconsulting.com"

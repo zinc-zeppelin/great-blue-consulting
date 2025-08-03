@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pineai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pineai123}
+      POSTGRES_DB: ${POSTGRES_DB:-pineai}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pineai-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - pineai-network
+
+  # n8n Workflow Automation
+  n8n:
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - N8N_JWT_SECRET=${N8N_JWT_SECRET}
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-pineai}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER:-pineai}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-pineai123}
+      - EXECUTIONS_PROCESS=main
+      - N8N_METRICS=true
+      - N8N_METRICS_PREFIX=n8n_
+      - GENERIC_TIMEZONE=America/New_York
+    volumes:
+      - ./data/n8n:/home/node/.n8n
+      - ./automation/n8n-workflows:/workflows
+    ports:
+      - "5678:5678"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - pineai-network
+
+  # Metabase Business Intelligence
+  metabase:
+    image: metabase/metabase:latest
+    restart: unless-stopped
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: ${POSTGRES_DB:-pineai}
+      MB_DB_PORT: 5432
+      MB_DB_USER: ${POSTGRES_USER:-pineai}
+      MB_DB_PASS: ${POSTGRES_PASSWORD:-pineai123}
+      MB_DB_HOST: postgres
+      MB_SITE_NAME: ${METABASE_SITE_NAME}
+      MB_ADMIN_EMAIL: ${METABASE_ADMIN_EMAIL}
+      MB_ADMIN_PASSWORD: ${METABASE_ADMIN_PASSWORD}
+    volumes:
+      - ./data/metabase:/metabase-data
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - pineai-network
+
+  # Nginx Reverse Proxy (for production)
+  # Uncomment when deploying to production with proper domain
+  # nginx:
+  #   image: nginx:alpine
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./infrastructure/nginx/ssl:/etc/nginx/ssl:ro
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   depends_on:
+  #     - n8n
+  #     - metabase
+  #   networks:
+  #     - pineai-network
+
+networks:
+  pineai-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  n8n-data:
+  metabase-data:
