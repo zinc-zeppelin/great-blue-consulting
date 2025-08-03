@@ -9,7 +9,31 @@ interface Message {
   timestamp: Date;
 }
 
-export default function Chat() {
+interface UserData {
+  name: string;
+  email: string;
+  company: string;
+  service: string;
+  message: string;
+}
+
+interface ChatProps {
+  userData: UserData;
+}
+
+const getServiceLabel = (service: string): string => {
+  const serviceLabels: { [key: string]: string } = {
+    'ai-automation': 'AI Automation',
+    'custom-agents': 'Custom AI Agents',
+    'process-optimization': 'Process Optimization',
+    'integration': 'Integration Services',
+    'strategy': 'AI Strategy Consulting',
+    'training': 'Training & Support'
+  };
+  return serviceLabels[service] || service;
+};
+
+export default function Chat({ userData }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTextMode, setIsTextMode] = useState(false);
@@ -18,10 +42,19 @@ export default function Chat() {
     onConnect: () => {
       console.log('Connected to ElevenLabs');
       setMessages(prev => [...prev, {
-        content: 'Connected! You can start speaking or type a message.',
+        content: `Hi ${userData.name}! I see you're interested in ${getServiceLabel(userData.service)} for ${userData.company}. I'm here to help you explore how AI can transform your business. You can speak to me or switch to text mode to type messages.`,
         role: 'assistant',
         timestamp: new Date()
       }]);
+      
+      // Send user context to the agent
+      if (conversation.sendContextualUpdate) {
+        setTimeout(() => {
+          conversation.sendContextualUpdate(
+            `User Information: Name: ${userData.name}, Email: ${userData.email}, Company: ${userData.company}, Service Interest: ${getServiceLabel(userData.service)}, Initial Message: ${userData.message}. The user has just submitted a form requesting assistance with AI automation.`
+          );
+        }, 500);
+      }
     },
     onDisconnect: () => {
       console.log('Disconnected from ElevenLabs');
@@ -78,7 +111,7 @@ export default function Chat() {
         timestamp: new Date()
       }]);
     }
-  }, [conversation]);
+  }, [conversation, userData]);
 
   const endConversation = useCallback(async () => {
     await conversation.endSession();
@@ -95,23 +128,29 @@ export default function Chat() {
       timestamp: new Date()
     }]);
 
-    // Send message to AI
-    // Note: The actual method might be different based on the SDK version
-    // You might need to use conversation.sendUserMessage(inputText) or similar
+    // Send message to AI using the sendUserMessage method
+    if (conversation.sendUserMessage) {
+      conversation.sendUserMessage(inputText);
+    }
     
     setInputText('');
   }, [inputText, conversation]);
+
+  // Auto-start conversation when component mounts
+  useEffect(() => {
+    startConversation();
+  }, []);
 
   return (
     <section id="ai-chat" className="py-20 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Chat with Our AI Assistant
+            Welcome, {userData.name}!
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Get instant answers about our services and how AI can transform your business. 
-            Our intelligent assistant is here to help you 24/7.
+            Let's explore how AI automation can help {userData.company}. 
+            Our AI consultant is ready to discuss your needs.
           </p>
         </div>
         
@@ -158,7 +197,9 @@ export default function Chat() {
                 }`} />
                 <span className="text-sm text-gray-600">
                   {conversation.status === 'connected' 
-                    ? (conversation.isSpeaking ? 'AI is speaking...' : 'Listening...') 
+                    ? (isTextMode 
+                      ? 'Text mode active' 
+                      : (conversation.isSpeaking ? 'AI is speaking...' : 'Listening...'))
                     : 'Not connected'}
                 </span>
               </div>
@@ -186,6 +227,17 @@ export default function Chat() {
                 >
                   End Chat
                 </button>
+                <button
+                  onClick={() => setIsTextMode(!isTextMode)}
+                  className={`px-4 py-2 rounded-md font-medium transition ${
+                    isTextMode
+                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      : 'bg-gray-600 text-white hover:bg-gray-700'
+                  }`}
+                  title="Toggle text input mode"
+                >
+                  {isTextMode ? 'Voice Mode' : 'Text Mode'}
+                </button>
               </div>
             </div>
 
@@ -195,7 +247,12 @@ export default function Chat() {
                 <input
                   type="text"
                   value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
+                  onChange={(e) => {
+                    setInputText(e.target.value);
+                    if (conversation.sendUserActivity) {
+                      conversation.sendUserActivity();
+                    }
+                  }}
                   placeholder="Type a message..."
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 />

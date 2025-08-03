@@ -1,6 +1,47 @@
 'use client';
 
-export default function ContactForm() {
+import { useState } from 'react';
+
+interface UserData {
+  name: string;
+  email: string;
+  company: string;
+  service: string;
+  message: string;
+}
+
+interface ContactFormProps {
+  onSubmit?: (data: UserData) => void;
+}
+
+export default function ContactForm({ onSubmit }: ContactFormProps) {
+  const [formData, setFormData] = useState<UserData>({
+    name: '',
+    email: '',
+    company: '',
+    service: '',
+    message: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (onSubmit) {
+      // Call the parent's onSubmit callback
+      onSubmit(formData);
+    } else {
+      // Default behavior: submit to Netlify
+      const form = e.target as HTMLFormElement;
+      form.submit();
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
 
   return (
     <section id="contact" className="py-20 bg-gray-50">
@@ -17,6 +58,7 @@ export default function ContactForm() {
           method="POST" 
           data-netlify="true"
           action="/success"
+          onSubmit={handleSubmit}
           className="bg-white rounded-lg shadow-md p-8"
         >
           <input type="hidden" name="form-name" value="contact" />
@@ -30,6 +72,8 @@ export default function ContactForm() {
                 type="text"
                 id="name"
                 name="name"
+                value={formData.name}
+                onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
               />
@@ -43,6 +87,8 @@ export default function ContactForm() {
                 type="email"
                 id="email"
                 name="email"
+                value={formData.email}
+                onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
               />
@@ -57,6 +103,8 @@ export default function ContactForm() {
               type="text"
               id="company"
               name="company"
+              value={formData.company}
+              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
             />
           </div>
@@ -68,6 +116,8 @@ export default function ContactForm() {
             <select
               id="service"
               name="service"
+              value={formData.service}
+              onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
             >
               <option value="">Select a service</option>
@@ -88,6 +138,8 @@ export default function ContactForm() {
               id="message"
               name="message"
               rows={4}
+              value={formData.message}
+              onChange={handleChange}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
             ></textarea>
@@ -97,7 +149,7 @@ export default function ContactForm() {
             type="submit"
             className="w-full bg-green-600 text-white py-3 px-6 rounded-md text-lg font-semibold hover:bg-green-700 transition"
           >
-            Send Message
+            Start Consultation
           </button>
         </form>
       </div>
