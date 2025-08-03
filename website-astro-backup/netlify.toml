@@ -1,13 +1,9 @@
 [build]
   command = "npm run build"
-  publish = ".next"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18"
-  NEXT_PUBLIC_ELEVENLABS_AGENT_ID = "agent_5501k0vy6b9zet2v2vabyytrs0y9"
 
 [[redirects]]
   from = "/api/*"
