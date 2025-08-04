@@ -42,19 +42,10 @@ export default function Chat({ userData }: ChatProps) {
     onConnect: () => {
       console.log('Connected to ElevenLabs');
       setMessages(prev => [...prev, {
-        content: `Hi ${userData.name}! I see you're interested in ${getServiceLabel(userData.service)} for ${userData.company}. I'm here to help you explore how AI can transform your business. You can speak to me or switch to text mode to type messages.`,
+        content: `Connected! I have your information and I'm ready to discuss how AI can help ${userData.company}. You can speak to me or switch to text mode to type messages.`,
         role: 'assistant',
         timestamp: new Date()
       }]);
-      
-      // Send user context to the agent
-      if (conversation.sendContextualUpdate) {
-        setTimeout(() => {
-          conversation.sendContextualUpdate(
-            `User Information: Name: ${userData.name}, Email: ${userData.email}, Company: ${userData.company}, Service Interest: ${getServiceLabel(userData.service)}, Initial Message: ${userData.message}. The user has just submitted a form requesting assistance with AI automation.`
-          );
-        }, 500);
-      }
     },
     onDisconnect: () => {
       console.log('Disconnected from ElevenLabs');
@@ -98,10 +89,17 @@ export default function Chat({ userData }: ChatProps) {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
       
-      // Start conversation with your agent ID
+      // Start conversation with your agent ID and dynamic variables
       await conversation.startSession({
         agentId: 'agent_5501k0vy6b9zet2v2vabyytrs0y9', // Replace with your agent ID
         connectionType: 'webrtc', // or 'websocket'
+        dynamicVariables: {
+          user_name: userData.name,
+          user_email: userData.email,
+          user_company: userData.company,
+          user_service: getServiceLabel(userData.service),
+          user_message: userData.message
+        }
       });
     } catch (error) {
       console.error('Failed to start conversation:', error);
