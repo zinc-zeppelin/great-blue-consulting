@@ -37,10 +37,23 @@ export default function Chat({ userData }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTextMode, setIsTextMode] = useState(false);
+  const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
+  const [debugInfo, setDebugInfo] = useState({
+    status: 'idle',
+    isSpeaking: false,
+    audioActive: false,
+    lastEvent: 'none'
+  });
 
   const conversation = useConversation({
     onConnect: () => {
-      console.log('Connected to ElevenLabs');
+      console.log('🟢 Connected to ElevenLabs', {
+        timestamp: new Date().toISOString(),
+        conversationStatus: conversation.status,
+        isSpeaking: conversation.isSpeaking,
+        userData
+      });
+      setDebugInfo(prev => ({ ...prev, lastEvent: 'connected' }));
       setMessages(prev => [...prev, {
         content: `Connected! I have your information and I'm ready to discuss how AI can help ${userData.company}. You can speak to me or switch to text mode to type messages.`,
         role: 'assistant',
@@ -48,7 +61,10 @@ export default function Chat({ userData }: ChatProps) {
       }]);
     },
     onDisconnect: () => {
-      console.log('Disconnected from ElevenLabs');
+      console.log('🔴 Disconnected from ElevenLabs', {
+        timestamp: new Date().toISOString()
+      });
+      setDebugInfo(prev => ({ ...prev, lastEvent: 'disconnected' }));
       setMessages(prev => [...prev, {
         content: 'Conversation ended.',
         role: 'assistant',
@@ -56,7 +72,12 @@ export default function Chat({ userData }: ChatProps) {
       }]);
     },
     onMessage: (message: any) => {
-      console.log('Message received:', message);
+      console.log('💬 Message received:', {
+        message,
+        timestamp: new Date().toISOString(),
+        type: typeof message
+      });
+      setDebugInfo(prev => ({ ...prev, lastEvent: 'message' }));
       // Handle different message formats
       if (typeof message === 'string') {
         // Simple string message
@@ -75,22 +96,76 @@ export default function Chat({ userData }: ChatProps) {
       }
     },
     onError: (error: any) => {
-      console.error('Conversation error:', error);
+      console.error('❌ Conversation error details:', {
+        error,
+        message: error.message,
+        type: error.type,
+        code: error.code,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
+      });
+      setDebugInfo(prev => ({ ...prev, lastEvent: `error: ${error.message}` }));
       setMessages(prev => [...prev, {
         content: `Error: ${error.message || 'Something went wrong'}`,
         role: 'assistant',
         timestamp: new Date()
       }]);
+    },
+    // Add new debugging handlers
+    onModeChange: (data: any) => {
+      console.log('🔄 Mode changed:', data);
+      setDebugInfo(prev => ({ ...prev, lastEvent: `mode: ${data?.mode || 'unknown'}` }));
+    },
+    onStatusChange: (status: any) => {
+      console.log('📊 Status changed:', status);
+      setDebugInfo(prev => ({ ...prev, status: status || 'unknown' }));
+    },
+    onAudioData: (data: any) => {
+      console.log('🎤 Audio data received:', {
+        hasData: !!data,
+        timestamp: new Date().toISOString()
+      });
+    },
+    onVolumeChange: (volume: any) => {
+      console.log('🔊 Volume change:', volume);
     }
   });
 
   const startConversation = useCallback(async () => {
     try {
+      console.log('🚀 Starting conversation...');
+      
       // Request microphone permission
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log('🎙️ Microphone stream obtained:', {
+        active: stream.active,
+        id: stream.id,
+        tracks: stream.getTracks().map(track => ({
+          kind: track.kind,
+          label: track.label,
+          enabled: track.enabled,
+          muted: track.muted,
+          readyState: track.readyState,
+          settings: track.getSettings()
+        }))
+      });
+      setAudioStream(stream);
+      setDebugInfo(prev => ({ ...prev, audioActive: stream.active }));
       
       // Start conversation with your agent ID and dynamic variables
-      await conversation.startSession({
+      console.log('📡 Starting session with config:', {
+        agentId: 'agent_5501k0vy6b9zet2v2vabyytrs0y9',
+        connectionType: 'webrtc',
+        dynamicVariables: {
+          user_name: userData.name,
+          user_email: userData.email,
+          user_company: userData.company,
+          user_service: getServiceLabel(userData.service),
+          user_message: userData.message
+        }
+      });
+      
+      const sessionId = await conversation.startSession({
         agentId: 'agent_5501k0vy6b9zet2v2vabyytrs0y9', // Replace with your agent ID
         connectionType: 'webrtc', // or 'websocket'
         dynamicVariables: {
@@ -101,8 +176,14 @@ export default function Chat({ userData }: ChatProps) {
           user_message: userData.message
         }
       });
+      
+      console.log('✅ Session started:', {
+        sessionId,
+        conversationStatus: conversation.status,
+        timestamp: new Date().toISOString()
+      });
     } catch (error) {
-      console.error('Failed to start conversation:', error);
+      console.error('❌ Failed to start conversation:', error);
       setMessages(prev => [...prev, {
         content: 'Failed to start conversation. Please check your microphone permissions.',
         role: 'assistant',
@@ -139,6 +220,54 @@ export default function Chat({ userData }: ChatProps) {
     startConversation();
   }, []);
 
+  // Update debug info with conversation status
+  useEffect(() => {
+    setDebugInfo(prev => ({
+      ...prev,
+      status: conversation.status,
+      isSpeaking: conversation.isSpeaking || false
+    }));
+  }, [conversation.status, conversation.isSpeaking]);
+
+  // Make debugging functions available globally
+  useEffect(() => {
+    (window as any).debugConversation = {
+      conversation,
+      audioStream,
+      debugInfo,
+      checkMicrophone: async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          console.log('🎙️ Microphone test:', stream.getTracks());
+          stream.getTracks().forEach(track => track.stop());
+          return true;
+        } catch (e) {
+          console.error('❌ Microphone test failed:', e);
+          return false;
+        }
+      },
+      getStatus: () => ({
+        status: conversation.status,
+        isSpeaking: conversation.isSpeaking,
+        audioActive: audioStream?.active,
+        debugInfo
+      }),
+      testAudioContext: () => {
+        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        const audioContext = new AudioContext();
+        console.log('🔊 Audio Context State:', audioContext.state);
+        if (audioContext.state === 'suspended') {
+          audioContext.resume().then(() => {
+            console.log('✅ Audio Context resumed');
+          });
+        }
+        return audioContext.state;
+      }
+    };
+    
+    console.log('🐛 Debug functions available in console: window.debugConversation');
+  }, [conversation, audioStream, debugInfo]);
+
   return (
     <section id="ai-chat" className="py-20 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -150,6 +279,24 @@ export default function Chat({ userData }: ChatProps) {
             Let's explore how AI automation can help {userData.company}. 
             Our AI consultant is ready to discuss your needs.
           </p>
+        </div>
+        
+        {/* Debug Panel */}
+        <div className="mb-4 bg-gray-100 p-3 rounded-lg text-xs font-mono">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div>
+              <span className="font-semibold">Status:</span> {debugInfo.status}
+            </div>
+            <div>
+              <span className="font-semibold">Speaking:</span> {debugInfo.isSpeaking ? 'Yes' : 'No'}
+            </div>
+            <div>
+              <span className="font-semibold">Audio:</span> {debugInfo.audioActive ? 'Active' : 'Inactive'}
+            </div>
+            <div>
+              <span className="font-semibold">Last Event:</span> {debugInfo.lastEvent}
+            </div>
+          </div>
         </div>
         
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
