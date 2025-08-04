@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Vapi from '@vapi-ai/web';
 import VapiChatSDKSimple from './VapiChatSDKSimple';
 
@@ -11,6 +11,7 @@ export default function VoiceHeroEnhanced() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [conversation, setConversation] = useState<Array<{role: string, text: string}>>([]);
   const [showTranscript, setShowTranscript] = useState(false);
+  const shouldStartCall = useRef(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -25,28 +26,38 @@ export default function VoiceHeroEnhanced() {
   }, []);
 
   useEffect(() => {
-    if (callStatus === 'idle') return;
-    
-    const initializeVapi = async () => {
+    let mounted = true;
+    let vapiInstance: any = null;
+
+    const initializeAndStartCall = async () => {
+      if (!mounted || callStatus !== 'connecting') return;
+      
       try {
         const { default: VapiSDK } = await import('@vapi-ai/web');
-        const vapiInstance = new VapiSDK('c5045627-4627-46f8-94e1-1279ae22343c');
+        if (!mounted) return;
+        
+        vapiInstance = new VapiSDK('c5045627-4627-46f8-94e1-1279ae22343c');
         
         vapiInstance.on('call-start', () => {
-          setCallStatus('connected');
+          if (mounted) {
+            setCallStatus('connected');
+          }
         });
         
         vapiInstance.on('call-end', () => {
-          setCallStatus('ended');
-          // Clean up the instance
-          if (vapiInstance) {
-            vapiInstance.removeAllListeners();
-            setVapi(null);
+          if (mounted) {
+            setCallStatus('ended');
+            setTimeout(() => {
+              if (mounted) {
+                setShowTranscript(true);
+              }
+            }, 1000);
           }
-          setTimeout(() => setShowTranscript(true), 1000);
         });
         
         vapiInstance.on('message', (message) => {
+          if (!mounted) return;
+          
           if (message.type === 'speech-update') {
             setIsSpeaking(message.status === 'started');
           }
@@ -70,42 +81,42 @@ export default function VoiceHeroEnhanced() {
         
         vapiInstance.on('error', (error) => {
           console.error('Vapi error:', error);
-          setCallStatus('ended');
-          // Clean up on error too
-          if (vapiInstance) {
-            vapiInstance.removeAllListeners();
-            setVapi(null);
+          if (mounted) {
+            setCallStatus('ended');
           }
         });
         
-        setVapi(vapiInstance);
-        
-        // Start the call
-        setTimeout(async () => {
-          if (vapiInstance && callStatus === 'connecting') {
-            try {
-              await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
-            } catch (error) {
-              console.error('Failed to start call:', error);
+        if (mounted) {
+          setVapi(vapiInstance);
+          
+          // Start the call
+          try {
+            await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
+          } catch (error) {
+            console.error('Failed to start call:', error);
+            if (mounted) {
               setCallStatus('ended');
             }
           }
-        }, 1000);
+        }
       } catch (error) {
         console.error('Failed to load Vapi SDK:', error);
+        if (mounted) {
+          setCallStatus('ended');
+        }
       }
     };
     
     if (callStatus === 'connecting') {
-      initializeVapi();
+      initializeAndStartCall();
     }
     
     // Cleanup function
     return () => {
-      if (vapi) {
-        vapi.stop();
-        vapi.removeAllListeners();
-        setVapi(null);
+      mounted = false;
+      if (vapiInstance) {
+        vapiInstance.stop();
+        vapiInstance.removeAllListeners();
       }
     };
   }, [callStatus]);
@@ -116,9 +127,11 @@ export default function VoiceHeroEnhanced() {
 
   const endCall = async () => {
     if (vapi) {
-      await vapi.stop();
-      vapi.removeAllListeners();
-      setVapi(null);
+      try {
+        await vapi.stop();
+      } catch (error) {
+        console.error('Error stopping call:', error);
+      }
       setCallStatus('ended');
       setTimeout(() => setShowTranscript(true), 1000);
     }
