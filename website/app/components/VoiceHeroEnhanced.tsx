@@ -38,6 +38,11 @@ export default function VoiceHeroEnhanced() {
         
         vapiInstance.on('call-end', () => {
           setCallStatus('ended');
+          // Clean up the instance
+          if (vapiInstance) {
+            vapiInstance.removeAllListeners();
+            setVapi(null);
+          }
           setTimeout(() => setShowTranscript(true), 1000);
         });
         
@@ -66,13 +71,18 @@ export default function VoiceHeroEnhanced() {
         vapiInstance.on('error', (error) => {
           console.error('Vapi error:', error);
           setCallStatus('ended');
+          // Clean up on error too
+          if (vapiInstance) {
+            vapiInstance.removeAllListeners();
+            setVapi(null);
+          }
         });
         
         setVapi(vapiInstance);
         
         // Start the call
         setTimeout(async () => {
-          if (vapiInstance) {
+          if (vapiInstance && callStatus === 'connecting') {
             try {
               await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
             } catch (error) {
@@ -89,6 +99,15 @@ export default function VoiceHeroEnhanced() {
     if (callStatus === 'connecting') {
       initializeVapi();
     }
+    
+    // Cleanup function
+    return () => {
+      if (vapi) {
+        vapi.stop();
+        vapi.removeAllListeners();
+        setVapi(null);
+      }
+    };
   }, [callStatus]);
 
   const startChat = () => {
@@ -98,6 +117,10 @@ export default function VoiceHeroEnhanced() {
   const endCall = async () => {
     if (vapi) {
       await vapi.stop();
+      vapi.removeAllListeners();
+      setVapi(null);
+      setCallStatus('ended');
+      setTimeout(() => setShowTranscript(true), 1000);
     }
   };
 
