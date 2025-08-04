@@ -39,33 +39,3 @@ body {
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-in-out forwards;
 }
-
-@keyframes voice-wave {
-  0%, 100% {
-    height: 8px;
-  }
-  50% {
-    height: 32px;
-  }
-}
-
-.animate-voice-wave {
-  animation: voice-wave 0.8s ease-in-out infinite;
-}
-
-@keyframes bounce-horizontal {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(4px);
-  }
-}
-
-.animate-bounce-horizontal {
-  animation: bounce-horizontal 1.5s ease-in-out infinite;
-}
-
-.animation-delay-1000 {
-  animation-delay: 1s;
-}
