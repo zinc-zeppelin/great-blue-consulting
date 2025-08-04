@@ -53,12 +53,12 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
         
         setVapi(vapiInstance);
         
-        // Start the call after a short delay to ensure everything is ready
+        // Start the call after a delay to ensure everything is ready
         setTimeout(() => {
           if (vapiInstance) {
             startCall(vapiInstance);
           }
-        }, 1000);
+        }, 2000);
       } catch (error) {
         console.error('Failed to load Vapi SDK:', error);
       }
@@ -77,25 +77,8 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
       setCallStatus('connecting');
       console.log('Starting Vapi call...');
       
-      const config: any = {
-        assistantOverrides: {
-          metadata: { sessionId },
-          // Always provide variableValues with defaults when userData is null
-          variableValues: userData ? {
-            user_name: userData.name,
-            user_email: userData.email,
-            user_company: userData.company
-          } : {
-            user_name: '',
-            user_email: '',
-            user_company: '',
-            user_service: '',
-            user_message: ''
-          }
-        }
-      };
-      
-      await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7', config);
+      // Start with just the assistant ID, no overrides needed for initial chat
+      await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
       console.log('Vapi call started successfully');
     } catch (error) {
       console.error('Failed to start call:', error);
