@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Vapi from '@vapi-ai/web';
+// Vapi type will be imported dynamically
 
 interface UserData {
   name: string;
@@ -28,13 +28,18 @@ const getServiceLabel = (service: string): string => {
 };
 
 export default function VapiChatSDK({ userData }: VapiChatProps) {
-  const [vapi, setVapi] = useState<Vapi | null>(null);
+  const [vapi, setVapi] = useState<any>(null);
   const [callStatus, setCallStatus] = useState<'idle' | 'connecting' | 'connected' | 'ended'>('idle');
   const [transcript, setTranscript] = useState<string[]>([]);
+  const [sdkLoading, setSdkLoading] = useState(true);
+  const [sdkError, setSdkError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Initialize Vapi instance
-    const vapiInstance = new Vapi('c5045627-4627-46f8-94e1-1279ae22343c');
+    // Dynamically import Vapi to ensure it loads in the browser
+    const initializeVapi = async () => {
+      try {
+        const { default: VapiSDK } = await import('@vapi-ai/web');
+        const vapiInstance = new VapiSDK('c5045627-4627-46f8-94e1-1279ae22343c');
     
     // Set up event listeners
     vapiInstance.on('call-start', () => {
@@ -57,11 +62,22 @@ export default function VapiChatSDK({ userData }: VapiChatProps) {
     vapiInstance.on('error', (error) => {
       console.error('Vapi error:', error);
     });
+        
+        setVapi(vapiInstance);
+        setSdkLoading(false);
+      } catch (error) {
+        console.error('Failed to load Vapi SDK:', error);
+        setSdkError('Failed to initialize voice chat. Please refresh the page.');
+        setSdkLoading(false);
+      }
+    };
     
-    setVapi(vapiInstance);
+    initializeVapi();
     
     return () => {
-      vapiInstance.stop();
+      if (vapi) {
+        vapi.stop();
+      }
     };
   }, []);
 
@@ -111,7 +127,28 @@ export default function VapiChatSDK({ userData }: VapiChatProps) {
         </div>
         
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden p-8">
+          {/* SDK Loading State */}
+          {sdkLoading && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">Loading voice chat SDK...</p>
+            </div>
+          )}
+          
+          {/* SDK Error State */}
+          {sdkError && (
+            <div className="text-center py-8">
+              <p className="text-red-600">{sdkError}</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Refresh Page
+              </button>
+            </div>
+          )}
+          
           {/* Call Controls */}
+          {!sdkLoading && !sdkError && (
           <div className="flex justify-center gap-4 mb-8">
             <button
               onClick={startCall}
@@ -134,8 +171,10 @@ export default function VapiChatSDK({ userData }: VapiChatProps) {
               </button>
             )}
           </div>
+          )}
           
           {/* Status Indicator */}
+          {!sdkLoading && !sdkError && (
           <div className="text-center mb-6">
             <div className="flex items-center justify-center gap-2">
               <div className={`w-3 h-3 rounded-full animate-pulse ${
@@ -151,6 +190,7 @@ export default function VapiChatSDK({ userData }: VapiChatProps) {
               </span>
             </div>
           </div>
+          )}
           
           {/* Transcript Display */}
           {transcript.length > 0 && (
