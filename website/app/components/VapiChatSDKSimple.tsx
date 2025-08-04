@@ -53,8 +53,12 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
         
         setVapi(vapiInstance);
         
-        // Auto-start the call
-        setTimeout(() => startCall(vapiInstance), 500);
+        // Start the call after a short delay to ensure everything is ready
+        setTimeout(() => {
+          if (vapiInstance) {
+            startCall(vapiInstance);
+          }
+        }, 1000);
       } catch (error) {
         console.error('Failed to load Vapi SDK:', error);
       }
@@ -64,10 +68,14 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
   }, []);
 
   const startCall = async (vapiInstance: any) => {
-    if (!vapiInstance) return;
+    if (!vapiInstance) {
+      console.error('Vapi instance not available');
+      return;
+    }
     
     try {
       setCallStatus('connecting');
+      console.log('Starting Vapi call...');
       
       const config: any = {
         assistantOverrides: {
@@ -85,9 +93,12 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
       }
       
       await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7', config);
+      console.log('Vapi call started successfully');
     } catch (error) {
       console.error('Failed to start call:', error);
-      setCallStatus('idle');
+      setCallStatus('ended');
+      // Show error to user
+      alert('Unable to start voice chat. Please check your microphone permissions and try again.');
     }
   };
 
