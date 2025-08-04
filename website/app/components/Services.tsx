@@ -1,4 +1,10 @@
+'use client';
+
+import { useState } from 'react';
+
 export default function Services() {
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
+
   const services = [
     {
       title: "AI Strategy Consulting",
@@ -8,6 +14,23 @@ export default function Services() {
         "Technology stack recommendations",
         "Implementation timeline",
         "ROI projections"
+      ],
+      examples: [
+        {
+          level: "Simple",
+          title: "Automated Email Responses",
+          description: "Deploy GPT-powered email assistant that drafts responses, saving 2-3 hours daily"
+        },
+        {
+          level: "Medium",
+          title: "Customer Sentiment Dashboard",
+          description: "Real-time analysis of customer feedback across all channels with actionable insights"
+        },
+        {
+          level: "Complex",
+          title: "Multi-Agent Intelligence System",
+          description: "Autonomous agents for competitive analysis, market research, and strategic recommendations"
+        }
       ],
       icon: (
         <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -24,6 +47,23 @@ export default function Services() {
         "Integration planning",
         "Performance monitoring"
       ],
+      examples: [
+        {
+          level: "Simple",
+          title: "Document Classification",
+          description: "Auto-sort and route incoming documents to the right teams, reducing manual filing by 90%"
+        },
+        {
+          level: "Medium",
+          title: "Invoice Processing Pipeline",
+          description: "OCR extraction, validation, and approval workflows with exception handling"
+        },
+        {
+          level: "Complex",
+          title: "Order Fulfillment Orchestration",
+          description: "End-to-end automation from order intake to delivery with multi-system integration"
+        }
+      ],
       icon: (
         <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -39,6 +79,23 @@ export default function Services() {
         "API development",
         "Scalable architecture",
         "Ongoing optimization"
+      ],
+      examples: [
+        {
+          level: "Simple",
+          title: "FAQ Chatbot",
+          description: "24/7 customer support bot that handles common questions, reducing tickets by 60%"
+        },
+        {
+          level: "Medium",
+          title: "Predictive Maintenance System",
+          description: "ML models that predict equipment failures before they happen, saving costly downtime"
+        },
+        {
+          level: "Complex",
+          title: "Multi-Modal AI Agent",
+          description: "Vision, voice, and text-enabled agent for complete customer interaction automation"
+        }
       ],
       icon: (
         <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,13 +139,45 @@ export default function Services() {
                   ))}
                 </ul>
                 
+                {/* Expandable Examples Section */}
                 <div className="mt-8">
-                  <a href="#" className="inline-flex items-center text-green-600 font-semibold hover:text-green-700 group-hover:translate-x-2 transition-all duration-200">
-                    Learn more
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <button
+                    onClick={() => setExpandedCard(expandedCard === index ? null : index)}
+                    className="inline-flex items-center text-green-600 font-semibold hover:text-green-700 transition-all duration-200"
+                  >
+                    <span>View AI examples</span>
+                    <svg 
+                      className={`w-4 h-4 ml-2 transform transition-transform duration-200 ${
+                        expandedCard === index ? 'rotate-180' : ''
+                      }`} 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7 7" />
                     </svg>
-                  </a>
+                  </button>
+                  
+                  {/* Examples Content */}
+                  <div className={`mt-6 space-y-4 overflow-hidden transition-all duration-300 ${
+                    expandedCard === index ? 'max-h-96' : 'max-h-0'
+                  }`}>
+                    {service.examples.map((example, exIdx) => (
+                      <div key={exIdx} className="border-l-4 border-green-500 pl-4 py-2">
+                        <div className="flex items-center mb-1">
+                          <span className={`text-xs font-semibold px-2 py-1 rounded-full mr-2 ${
+                            example.level === 'Simple' ? 'bg-blue-100 text-blue-700' :
+                            example.level === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-purple-100 text-purple-700'
+                          }`}>
+                            {example.level}
+                          </span>
+                          <h4 className="font-semibold text-gray-900">{example.title}</h4>
+                        </div>
+                        <p className="text-sm text-gray-600">{example.description}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

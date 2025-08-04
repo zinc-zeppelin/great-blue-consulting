@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import VapiChatSDKSimple from './VapiChatSDKSimple';
+import VapiChatInline from './VapiChatInline';
 
 export default function VoiceHeroEnhanced() {
   const [showChat, setShowChat] = useState(false);
@@ -22,10 +22,6 @@ export default function VoiceHeroEnhanced() {
   const startChat = () => {
     setShowChat(true);
   };
-
-  if (showChat) {
-    return <VapiChatSDKSimple userData={null} onClose={() => setShowChat(false)} />;
-  }
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -129,6 +125,9 @@ export default function VoiceHeroEnhanced() {
           </svg>
         </div>
       </div>
+      
+      {/* Inline Voice Chat */}
+      {showChat && <VapiChatInline onClose={() => setShowChat(false)} />}
     </section>
   );
 }
