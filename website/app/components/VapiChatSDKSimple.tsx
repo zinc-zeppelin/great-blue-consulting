@@ -12,17 +12,18 @@ interface UserData {
 interface VapiChatSDKProps {
   userData: UserData | null;
   onClose?: () => void;
+  initialConversation?: Array<{role: string, text: string}>;
 }
 
-export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProps) {
+export default function VapiChatSDKSimple({ userData, onClose, initialConversation = [] }: VapiChatSDKProps) {
   const [vapi, setVapi] = useState<any>(null);
   const [callStatus, setCallStatus] = useState<'idle' | 'connecting' | 'connected' | 'ended'>('idle');
   const [transcript, setTranscript] = useState<Array<{role: string, text: string}>>([]);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(true); // Show form immediately since call already ended
   const [formData, setFormData] = useState({ name: '', email: '', company: '' });
   const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [conversation, setConversation] = useState<Array<{role: string, text: string}>>([]);
+  const [conversation, setConversation] = useState<Array<{role: string, text: string}>>(initialConversation);
 
   useEffect(() => {
     const initializeVapi = async () => {
@@ -139,9 +140,8 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
     }
   };
 
-  // Show form after chat
-  if (showForm) {
-    return (
+  // Since we're coming from VoiceHeroEnhanced after call ended, show form directly
+  return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white rounded-lg shadow-xl p-8">
@@ -167,7 +167,7 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
             
             <div className="border-t pt-8">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                This conversation is temporary. Save your personalized insights:
+                Get your personalized AI insights and implementation ideas:
               </h3>
               
               <form onSubmit={handleFormSubmit} className="space-y-4">
@@ -208,65 +208,16 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
                   type="submit"
                   className="w-full py-3 px-6 text-white font-semibold bg-green-600 rounded-lg hover:bg-green-700 transition duration-200"
                 >
-                  Email Me This Consultation
+                  Email Me AI Insights & Ideas
                 </button>
               </form>
               
               <p className="text-sm text-gray-600 mt-4 text-center">
-                We'll send you the full transcript plus additional resources
+                We'll send you the transcript plus personalized AI implementation ideas for your business
               </p>
             </div>
           </div>
         </div>
       </div>
-    );
-  }
-
-  // Voice chat interface
-  return (
-    <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="mb-8">
-          {/* Simple voice visualization with fixed height container */}
-          <div className="h-16 flex items-center justify-center mb-8">
-            <div className="flex justify-center space-x-2">
-              {[...Array(5)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-2 bg-green-500 rounded-full transition-all duration-300 ${
-                    callStatus === 'connected' ? 'animate-voice-bar' : ''
-                  }`}
-                  style={{
-                    height: callStatus === 'connected' ? '24px' : '16px',
-                    animationDelay: `${i * 0.15}s`
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-          
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-            {callStatus === 'connecting' && 'Connecting to your AI consultant...'}
-            {callStatus === 'connected' && (isSpeaking ? 'AI Consultant is speaking...' : 'AI Consultant is listening...')}
-            {callStatus === 'ended' && 'Conversation ended'}
-            {callStatus === 'idle' && 'Preparing your consultation...'}
-          </h2>
-          
-          <p className="text-gray-600">
-            {callStatus === 'connected' && !isSpeaking && 'Speak naturally about your business needs'}
-            {callStatus === 'connected' && isSpeaking && 'Processing your request...'}
-          </p>
-        </div>
-        
-        {callStatus === 'connected' && (
-          <button
-            onClick={endCall}
-            className="px-8 py-3 text-gray-700 font-medium bg-gray-200 rounded-lg hover:bg-gray-300 transition duration-200"
-          >
-            End Conversation
-          </button>
-        )}
-      </div>
-    </div>
   );
 }
