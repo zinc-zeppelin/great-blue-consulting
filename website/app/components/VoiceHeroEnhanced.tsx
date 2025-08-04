@@ -163,26 +163,28 @@ export default function VoiceHeroEnhanced() {
           </button>
         ) : (
           <div className="inline-flex items-center justify-center px-12 py-6 text-xl font-semibold">
-            {/* Active call container */}
-            <div className="relative bg-white/90 backdrop-blur-sm rounded-full shadow-2xl px-8 py-4 flex items-center space-x-4">
-              {/* Voice visualization */}
-              <div className="flex space-x-1">
-                {[...Array(5)].map((_, i) => (
-                  <div
-                    key={i}
-                    className={`w-2 bg-green-500 rounded-full transition-all duration-300 ${
-                      callStatus === 'connected' ? 'animate-voice-bar' : ''
-                    }`}
-                    style={{
-                      height: callStatus === 'connected' ? '24px' : '16px',
-                      animationDelay: `${i * 0.15}s`
-                    }}
-                  />
-                ))}
+            {/* Active call container with fixed width */}
+            <div className="relative bg-white/90 backdrop-blur-sm rounded-full shadow-2xl px-8 py-4 flex items-center space-x-4 min-w-[320px]">
+              {/* Voice visualization with fixed container */}
+              <div className="w-[50px] h-[32px] flex items-center justify-center">
+                <div className="flex space-x-1">
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-2 bg-green-500 rounded-full transition-all duration-300 ${
+                        callStatus === 'connected' ? 'animate-voice-bar' : ''
+                      }`}
+                      style={{
+                        height: callStatus === 'connected' ? '24px' : '16px',
+                        animationDelay: `${i * 0.15}s`
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
               
-              {/* Status text */}
-              <span className="text-gray-900">
+              {/* Status text with fixed width */}
+              <span className="text-gray-900 w-[140px] text-center">
                 {callStatus === 'connecting' && 'Connecting...'}
                 {callStatus === 'connected' && (isSpeaking ? 'AI is speaking' : 'Listening...')}
                 {callStatus === 'ended' && 'Call ended'}
