@@ -21,6 +21,8 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', company: '' });
   const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [conversation, setConversation] = useState<Array<{role: string, text: string}>>([]);
 
   useEffect(() => {
     const initializeVapi = async () => {
@@ -38,6 +40,24 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
         });
         
         vapiInstance.on('message', (message) => {
+          // Handle speech status updates
+          if (message.type === 'speech-update') {
+            setIsSpeaking(message.status === 'started');
+          }
+          
+          // Handle conversation updates for clean transcript
+          if (message.type === 'conversation-update') {
+            const conversation = message.conversation || [];
+            const formattedConversation = conversation
+              .filter((msg: any) => msg.role && msg.content)
+              .map((msg: any) => ({
+                role: msg.role === 'assistant' ? 'assistant' : 'user',
+                text: msg.content
+              }));
+            setConversation(formattedConversation);
+          }
+          
+          // Still track individual transcripts for real-time display if needed
           if (message.type === 'transcript' && message.transcript) {
             setTranscript(prev => [...prev, {
               role: message.role,
@@ -124,7 +144,7 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
             
             {/* Transcript Box */}
             <div className="bg-gray-50 rounded-lg p-6 mb-8 max-h-96 overflow-y-auto">
-              {transcript.map((message, idx) => (
+              {(conversation.length > 0 ? conversation : transcript).map((message, idx) => (
                 <div key={idx} className={`mb-4 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
                   <p className="text-sm font-semibold text-gray-600 mb-1">
                     {message.role === 'user' ? 'You' : 'AI Consultant'}
@@ -200,30 +220,34 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
     <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
       <div className="text-center">
         <div className="mb-8">
-          {/* Simple voice visualization */}
-          <div className="flex justify-center space-x-2 mb-8">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className={`w-2 bg-green-500 rounded-full transition-all duration-300 ${
-                  callStatus === 'connected' ? 'h-8' : 'h-4'
-                }`}
-                style={{
-                  height: callStatus === 'connected' ? `${Math.random() * 32 + 8}px` : '16px'
-                }}
-              />
-            ))}
+          {/* Simple voice visualization with fixed height container */}
+          <div className="h-16 flex items-center justify-center mb-8">
+            <div className="flex justify-center space-x-2">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-2 bg-green-500 rounded-full transition-all duration-300 ${
+                    callStatus === 'connected' ? 'animate-voice-bar' : ''
+                  }`}
+                  style={{
+                    height: callStatus === 'connected' ? '24px' : '16px',
+                    animationDelay: `${i * 0.15}s`
+                  }}
+                />
+              ))}
+            </div>
           </div>
           
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">
             {callStatus === 'connecting' && 'Connecting to your AI consultant...'}
-            {callStatus === 'connected' && 'AI Consultant is listening...'}
+            {callStatus === 'connected' && (isSpeaking ? 'AI Consultant is speaking...' : 'AI Consultant is listening...')}
             {callStatus === 'ended' && 'Conversation ended'}
             {callStatus === 'idle' && 'Preparing your consultation...'}
           </h2>
           
           <p className="text-gray-600">
-            {callStatus === 'connected' && 'Speak naturally about your business needs'}
+            {callStatus === 'connected' && !isSpeaking && 'Speak naturally about your business needs'}
+            {callStatus === 'connected' && isSpeaking && 'Processing your request...'}
           </p>
         </div>
         

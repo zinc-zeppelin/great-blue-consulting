@@ -66,3 +66,16 @@ body {
 .animation-delay-4000 {
   animation-delay: 4s;
 }
+
+@keyframes voiceBar {
+  0%, 100% {
+    height: 16px;
+  }
+  50% {
+    height: 40px;
+  }
+}
+
+.animate-voice-bar {
+  animation: voiceBar 1.2s ease-in-out infinite;
+}
