@@ -55,7 +55,7 @@ export default function VoiceHeroEnhanced() {
           }
         });
         
-        vapiInstance.on('message', (message) => {
+        vapiInstance.on('message', (message: any) => {
           if (!mounted) return;
           
           if (message.type === 'speech-update') {
@@ -79,7 +79,7 @@ export default function VoiceHeroEnhanced() {
           }
         });
         
-        vapiInstance.on('error', (error) => {
+        vapiInstance.on('error', (error: any) => {
           console.error('Vapi error:', error);
           if (mounted) {
             setCallStatus('ended');
