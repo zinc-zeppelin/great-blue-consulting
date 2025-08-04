@@ -89,12 +89,14 @@ export default function VapiChatSDK({ userData }: VapiChatProps) {
       
       // Start call with assistant overrides for personalization
       await vapi.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7', {
-        variableValues: {
-          user_name: userData.name,
-          user_email: userData.email,
-          user_company: userData.company,
-          user_service: getServiceLabel(userData.service),
-          user_message: userData.message
+        assistantOverrides: {
+          variableValues: {
+            user_name: userData.name,
+            user_email: userData.email,
+            user_company: userData.company,
+            user_service: getServiceLabel(userData.service),
+            user_message: userData.message
+          }
         }
       });
     } catch (error) {
