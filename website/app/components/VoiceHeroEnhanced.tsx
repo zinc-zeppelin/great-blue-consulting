@@ -6,12 +6,11 @@ import VapiChatSDKSimple from './VapiChatSDKSimple';
 
 export default function VoiceHeroEnhanced() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [vapi, setVapi] = useState<any>(null);
+  const vapiRef = useRef<any>(null);
   const [callStatus, setCallStatus] = useState<'idle' | 'connecting' | 'connected' | 'ended'>('idle');
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [conversation, setConversation] = useState<Array<{role: string, text: string}>>([]);
   const [showTranscript, setShowTranscript] = useState(false);
-  const shouldStartCall = useRef(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -27,7 +26,6 @@ export default function VoiceHeroEnhanced() {
 
   useEffect(() => {
     let mounted = true;
-    let vapiInstance: any = null;
 
     const initializeAndStartCall = async () => {
       if (!mounted || callStatus !== 'connecting') return;
@@ -36,7 +34,7 @@ export default function VoiceHeroEnhanced() {
         const { default: VapiSDK } = await import('@vapi-ai/web');
         if (!mounted) return;
         
-        vapiInstance = new VapiSDK('c5045627-4627-46f8-94e1-1279ae22343c');
+        const vapiInstance = new VapiSDK('c5045627-4627-46f8-94e1-1279ae22343c');
         
         vapiInstance.on('call-start', () => {
           if (mounted) {
@@ -47,6 +45,11 @@ export default function VoiceHeroEnhanced() {
         vapiInstance.on('call-end', () => {
           if (mounted) {
             setCallStatus('ended');
+            // Clean up immediately
+            if (vapiRef.current) {
+              vapiRef.current.removeAllListeners();
+              vapiRef.current = null;
+            }
             setTimeout(() => {
               if (mounted) {
                 setShowTranscript(true);
@@ -83,11 +86,16 @@ export default function VoiceHeroEnhanced() {
           console.error('Vapi error:', error);
           if (mounted) {
             setCallStatus('ended');
+            // Clean up on error too
+            if (vapiRef.current) {
+              vapiRef.current.removeAllListeners();
+              vapiRef.current = null;
+            }
           }
         });
         
         if (mounted) {
-          setVapi(vapiInstance);
+          vapiRef.current = vapiInstance;
           
           // Start the call
           try {
@@ -114,9 +122,10 @@ export default function VoiceHeroEnhanced() {
     // Cleanup function
     return () => {
       mounted = false;
-      if (vapiInstance) {
-        vapiInstance.stop();
-        vapiInstance.removeAllListeners();
+      if (vapiRef.current) {
+        vapiRef.current.stop();
+        vapiRef.current.removeAllListeners();
+        vapiRef.current = null;
       }
     };
   }, [callStatus]);
@@ -126,9 +135,11 @@ export default function VoiceHeroEnhanced() {
   };
 
   const endCall = async () => {
-    if (vapi) {
+    if (vapiRef.current) {
       try {
-        await vapi.stop();
+        await vapiRef.current.stop();
+        vapiRef.current.removeAllListeners();
+        vapiRef.current = null;
       } catch (error) {
         console.error('Error stopping call:', error);
       }
