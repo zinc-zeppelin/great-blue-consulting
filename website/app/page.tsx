@@ -1,14 +1,14 @@
 import Navigation from './components/Navigation';
-import Hero from './components/Hero';
-import ChatWithForm from './components/ChatWithForm';
+import HeroEnhanced from './components/HeroEnhanced';
+import ChatWithFormTeaser from './components/ChatWithFormTeaser';
 
 export default function Home() {
   return (
     <>
       <Navigation />
       <main>
-        <Hero />
-        <ChatWithForm />
+        <HeroEnhanced />
+        <ChatWithFormTeaser />
       </main>
       <footer className="bg-gray-800 text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
