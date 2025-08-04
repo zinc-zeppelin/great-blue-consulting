@@ -79,18 +79,21 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
       
       const config: any = {
         assistantOverrides: {
-          metadata: { sessionId }
+          metadata: { sessionId },
+          // Always provide variableValues with defaults when userData is null
+          variableValues: userData ? {
+            user_name: userData.name,
+            user_email: userData.email,
+            user_company: userData.company
+          } : {
+            user_name: '',
+            user_email: '',
+            user_company: '',
+            user_service: '',
+            user_message: ''
+          }
         }
       };
-      
-      // If we have user data, pass it as variables
-      if (userData) {
-        config.assistantOverrides.variableValues = {
-          user_name: userData.name,
-          user_email: userData.email,
-          user_company: userData.company
-        };
-      }
       
       await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7', config);
       console.log('Vapi call started successfully');
