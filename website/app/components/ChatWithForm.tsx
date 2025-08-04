@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import ContactForm from './ContactForm';
-import VapiChat from './VapiChat';
+import VapiChatSDK from './VapiChatSDK';
 
 interface UserData {
   name: string;
@@ -34,7 +34,7 @@ export default function ChatWithForm() {
         <ContactForm onSubmit={handleFormSubmit} />
       ) : (
         <div className="animate-fadeIn">
-          <VapiChat userData={userData!} />
+          <VapiChatSDK userData={userData!} />
         </div>
       )}
     </div>

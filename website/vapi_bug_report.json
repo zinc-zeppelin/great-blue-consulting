@@ -1,0 +1,156 @@
+{
+  "timestamp": "2025-08-04T13:16:59.199Z",
+  "url": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/#ai-chat",
+  "issues": [
+    {
+      "type": "NETWORK_ERROR",
+      "severity": "MEDIUM",
+      "url": "https://app.netlify.com/cdp/video/deploy-previews-feedback-v2.mp4",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "type": "NETWORK_ERROR",
+      "severity": "MEDIUM",
+      "url": "https://app.netlify.com/cdp/video/deploy-previews-notifications-v2.mp4",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "type": "NETWORK_ERROR",
+      "severity": "MEDIUM",
+      "url": "https://app.netlify.com/cdp/video/deploy-previews-workflow-v2.mp4",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "consoleMessages": [],
+  "pageInfo": {
+    "title": "PineAI Consulting - AI-Powered Business Solutions",
+    "url": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/#ai-chat",
+    "readyState": "complete",
+    "hasVapiScript": false,
+    "vapiVersion": "not found",
+    "bodyClasses": "antialiased",
+    "headScripts": [
+      "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/4bd1b696-cf72ae8a39fa05aa.js",
+      "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/964-02efbd2195ef91bd.js",
+      "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/main-app-436007414b6a1f7c.js",
+      "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/app/page-97e4e6fd611a0801.js",
+      "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/polyfills-42372ed130431b0a.js"
+    ],
+    "hasWebRTC": true
+  },
+  "vapiAnalysis": {
+    "elementsFound": 2,
+    "elements": [
+      {
+        "index": 0,
+        "tagName": "DIV",
+        "className": "vapi-widget-container",
+        "id": "",
+        "innerHTML": "\n        <vapi-widget public-key=\"c5045627-4627-46f8-94e1-1279ae22343c\" assistant-id=\"e5ff7a8b-b4a5-4e78-916c-40dd483c23d7\" mode=\"voice\" theme=\"dark\" base-bg-color=\"#ffffff\" accent-color=\"#10b981\" cta",
+        "styles": {
+          "display": "block",
+          "visibility": "visible",
+          "opacity": "1",
+          "position": "static",
+          "zIndex": "auto"
+        },
+        "dimensions": {
+          "width": 800,
+          "height": 0,
+          "top": 463.765625,
+          "left": 232.5
+        },
+        "isVisible": false,
+        "hasChildren": true,
+        "childrenCount": 1
+      },
+      {
+        "index": 1,
+        "tagName": "DIV",
+        "className": "vapi-widget-wrapper",
+        "id": "",
+        "innerHTML": "<div style=\"position: fixed; z-index: 9999;\"><div class=\"hover:scale-105 hover:-translate-y-1 hover:shadow-xl \" style=\"padding: 1rem 1.5rem; height: 3.5rem; border-radius: 1.5rem; background-color: rg",
+        "styles": {
+          "display": "block",
+          "visibility": "visible",
+          "opacity": "1",
+          "position": "static",
+          "zIndex": "auto"
+        },
+        "dimensions": {
+          "width": 800,
+          "height": 0,
+          "top": 463.765625,
+          "left": 232.5
+        },
+        "isVisible": false,
+        "hasChildren": true,
+        "childrenCount": 1
+      }
+    ]
+  },
+  "vapiStatus": {
+    "error": "Vapi not loaded"
+  },
+  "microphoneTest": {
+    "success": true,
+    "message": "Microphone access granted"
+  },
+  "interactableElements": [],
+  "resourceAnalysis": {
+    "scripts": [
+      {
+        "src": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/4bd1b696-cf72ae8a39fa05aa.js",
+        "loaded": true
+      },
+      {
+        "src": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/964-02efbd2195ef91bd.js",
+        "loaded": true
+      },
+      {
+        "src": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/main-app-436007414b6a1f7c.js",
+        "loaded": true
+      },
+      {
+        "src": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/app/page-97e4e6fd611a0801.js",
+        "loaded": true
+      },
+      {
+        "src": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/polyfills-42372ed130431b0a.js",
+        "loaded": true
+      },
+      {
+        "src": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/chunks/webpack-5694af5a2b225c90.js",
+        "loaded": true
+      },
+      {
+        "src": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/.netlify/scripts/cdp",
+        "loaded": true
+      },
+      {
+        "src": "https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js",
+        "loaded": true
+      }
+    ],
+    "stylesheets": [
+      {
+        "href": "https://deploy-preview-2--gregarious-moxie-b3361f.netlify.app/_next/static/css/e0c3ee64969e7b20.css",
+        "loaded": true
+      }
+    ],
+    "totalScripts": 8,
+    "totalStylesheets": 1
+  },
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "issue": "Vapi script not loaded",
+      "solution": "Ensure Vapi SDK is properly included in the page"
+    },
+    {
+      "priority": "MEDIUM",
+      "issue": "Vapi widget elements not visible",
+      "solution": "Check CSS styles (display, visibility, opacity, z-index)"
+    }
+  ]
+}
