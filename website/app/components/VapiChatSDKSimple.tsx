@@ -49,7 +49,14 @@ export default function VapiChatSDKSimple({ userData, onClose }: VapiChatSDKProp
           if (message.type === 'conversation-update') {
             const conversation = message.conversation || [];
             const formattedConversation = conversation
-              .filter((msg: any) => msg.role && msg.content)
+              .filter((msg: any) => {
+                // Filter out system messages and empty content
+                if (!msg.role || !msg.content) return false;
+                if (msg.role === 'system') return false;
+                // Filter out the initial system prompt that contains user variables
+                if (msg.role === 'assistant' && msg.content.includes('{{user_')) return false;
+                return true;
+              })
               .map((msg: any) => ({
                 role: msg.role === 'assistant' ? 'assistant' : 'user',
                 text: msg.content
