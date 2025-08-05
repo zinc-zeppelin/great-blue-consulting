@@ -23,7 +23,7 @@
 
 2. **Import the Workflow**
    - Click "Workflows" → "Import from File"
-   - Upload `n8n-consultation-workflow.json`
+   - Upload `workflows/n8n-consultation-workflow.json`
 
 3. **Set Up Gmail Credentials**
    - Click on the "Gmail - Send Email" node

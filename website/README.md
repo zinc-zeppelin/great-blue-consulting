@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PineAI Consulting Website
 
-## Getting Started
+AI-powered business consultation platform with voice chat and automated email insights.
 
-First, run the development server:
+## Features
+
+- 🎙️ **Voice Chat**: AI business consultant using Vapi.ai
+- 📧 **Automated Emails**: AI-generated insights via n8n workflow
+- 💬 **Real-time Conversation**: Natural voice interaction
+- 📊 **Business Analysis**: Personalized recommendations
+
+## Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3001
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+website/
+├── app/              # Next.js app directory
+│   ├── components/   # React components
+│   ├── page.tsx      # Homepage
+│   └── success/      # Success page
+├── docs/             # Documentation
+│   └── setup/        # Setup guides
+├── tests/            # Test scripts
+├── public/           # Static assets
+└── netlify.toml      # Netlify configuration
+```
 
-## Learn More
+## Key Components
 
-To learn more about Next.js, take a look at the following resources:
+- **VoiceChat.tsx**: Main voice interaction component
+- **VapiChatSDKSimple.tsx**: Post-chat form and transcript display
+- **workflows/n8n-consultation-workflow.json**: Email automation workflow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Website**: Deployed on Netlify
+- **n8n**: Hosted on Railway with Redis + PostgreSQL
+- **Voice**: Vapi.ai integration
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create `.env.local`:
+```
+# Copy from .env.example
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation
+
+- [Gmail Setup Guide](docs/setup/GMAIL_SETUP.md)
+- [n8n Setup Guide](docs/setup/N8N_SETUP.md)
+- [Main Project README](../README.md)
+
+## Testing
+
+```bash
+# Test n8n webhook
+node tests/test-n8n-webhook.js
+
+# Test voice chat
+node tests/test-fresh-voice.js
+```

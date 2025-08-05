@@ -14,7 +14,7 @@
 
 3. **Import the Workflow**
    - In n8n, click "Workflows" → "Import from File"
-   - Upload `n8n-consultation-workflow.json`
+   - Upload `workflows/n8n-consultation-workflow.json`
    - The workflow will appear in your dashboard
 
 4. **Configure Credentials**
