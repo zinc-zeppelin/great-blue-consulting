@@ -142,8 +142,22 @@ export default function VoiceHeroEnhanced() {
           try {
             console.log('Starting Vapi call with assistant ID...');
             
-            // Use the assistant ID you specified
-            const result = await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
+            // Use the assistant ID with overrides to ensure we get conversation updates
+            const assistantOverrides = {
+              clientMessages: [
+                "conversation-update",
+                "transcript",
+                "speech-update",
+                "function-call",
+                "hang",
+                "model-output",
+                "status-update",
+                "user-interrupted",
+                "voice-input"
+              ]
+            };
+            
+            const result = await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7', assistantOverrides);
             console.log('Vapi start result:', result);
           } catch (error) {
             console.error('Failed to start call:', error);
@@ -264,46 +278,53 @@ export default function VoiceHeroEnhanced() {
           </button>
         ) : (
           <div className="inline-flex items-center justify-center px-12 py-6 text-xl font-semibold">
-            {/* Active call container with fixed width */}
-            <div className="relative bg-white/90 backdrop-blur-sm rounded-full shadow-2xl px-8 py-4 flex items-center space-x-4 min-w-[320px]">
-              {/* Voice visualization with fixed container */}
-              <div className="w-[50px] h-[32px] flex items-center justify-center">
-                <div className="flex space-x-1">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className={`w-2 bg-green-500 rounded-full transition-all duration-300 ${
-                        callStatus === 'connected' ? 'animate-voice-bar' : ''
-                      }`}
-                      style={{
-                        height: callStatus === 'connected' ? '24px' : '16px',
-                        animationDelay: `${i * 0.15}s`
-                      }}
-                    />
-                  ))}
-                </div>
+            {/* Active call container - more compact */}
+            <div className="relative bg-white/90 backdrop-blur-sm rounded-full shadow-2xl px-6 py-3 flex items-center space-x-3">
+              {/* Status indicator dot */}
+              <div className="relative">
+                <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  callStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' :
+                  callStatus === 'connected' && isSpeaking ? 'bg-green-500' :
+                  callStatus === 'connected' ? 'bg-blue-500' :
+                  'bg-gray-400'
+                }`} />
+                {callStatus === 'connected' && isSpeaking && (
+                  <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
+                )}
               </div>
               
-              {/* Status text with fixed width */}
-              <span className="text-gray-900 w-[140px] text-center">
-                {callStatus === 'connecting' && 'Connecting...'}
-                {callStatus === 'connected' && (
-                  isSpeaking ? 'Speaking...' : 'Listening...'
-                )}
-                {callStatus === 'ended' && 'Call ended'}
-              </span>
+              {/* Voice visualization bars */}
+              <div className="flex space-x-1">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={`w-1.5 rounded-full transition-all duration-300 ${
+                      callStatus === 'connected' && isSpeaking ? 'bg-green-500 animate-voice-bar' : 
+                      callStatus === 'connected' ? 'bg-blue-500' : 
+                      'bg-gray-300'
+                    }`}
+                    style={{
+                      height: callStatus === 'connected' && isSpeaking ? '20px' : '12px',
+                      animationDelay: `${i * 0.15}s`
+                    }}
+                  />
+                ))}
+              </div>
               
               {/* End call button */}
-              {callStatus === 'connected' && (
-                <button
-                  onClick={endCall}
-                  className="ml-4 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
+              <button
+                onClick={endCall}
+                className={`p-2 rounded-full transition-all duration-200 ${
+                  callStatus === 'connected' 
+                    ? 'bg-red-500 text-white hover:bg-red-600' 
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+                disabled={callStatus !== 'connected'}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
           </div>
         )}
