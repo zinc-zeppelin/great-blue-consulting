@@ -120,15 +120,6 @@ export default function VoiceChat() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-4">
-        {/* Logo */}
-        <div className="mb-8 flex justify-center">
-          <img 
-            src="/heron-logo.png" 
-            alt="Great Blue Consulting" 
-            className="w-24 h-24 md:w-32 md:h-32 drop-shadow-2xl"
-          />
-        </div>
-        
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
           <span className="block">Your AI Business</span>
           <span className="block bg-gradient-to-r from-yellow-200 via-green-200 to-blue-200 bg-clip-text text-transparent">
