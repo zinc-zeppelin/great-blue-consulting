@@ -11,7 +11,7 @@
 
 [[redirects]]
   from = "/api/consultation"
-  to = "https://YOUR-N8N-RAILWAY-URL.railway.app/webhook/consultation"
+  to = "https://n8n-railway-production-f3d61.up.railway.app/webhook/consultation"
   status = 200
   force = true
   [redirects.headers]

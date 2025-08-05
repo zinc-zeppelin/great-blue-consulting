@@ -51,22 +51,24 @@
     },
     {
       "parameters": {
-        "fromEmail": "insights@pineaiconsulting.com",
+        "fromEmail": "=YOUR_GMAIL_ADDRESS@gmail.com",
         "toEmail": "={{$node[\"Webhook - Consultation\"].json[\"formData\"][\"email\"]}}",
         "subject": "Your AI Consultation Insights - {{$node[\"Webhook - Consultation\"].json[\"formData\"][\"company\"]}}",
         "emailType": "html",
         "htmlBody": "=<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }\n    .container { max-width: 600px; margin: 0 auto; padding: 20px; }\n    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }\n    .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }\n    .insight-box { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }\n    .cta-button { display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }\n    .transcript { background: #e5e7eb; padding: 20px; margin-top: 30px; border-radius: 8px; font-size: 14px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>Your AI Consultation Insights</h1>\n      <p>Personalized recommendations for {{$node[\"Webhook - Consultation\"].json[\"formData\"][\"company\"]}}</p>\n    </div>\n    <div class=\"content\">\n      <p>Hi {{$node[\"Webhook - Consultation\"].json[\"formData\"][\"name\"]}},</p>\n      <p>Thank you for your consultation with our AI business advisor. Based on our conversation, here are your personalized insights and recommendations:</p>\n      \n      <div class=\"insight-box\">\n        {{$node[\"OpenAI - Analyze Conversation\"].json[\"message\"][\"content\"]}}\n      </div>\n      \n      <center>\n        <a href=\"https://pineaiconsulting.com/schedule\" class=\"cta-button\">Schedule a Follow-up Call</a>\n      </center>\n      \n      <div class=\"transcript\">\n        <h3>Full Conversation Transcript</h3>\n        {{$node[\"Webhook - Consultation\"].json[\"conversation\"].map(m => \"<p><strong>\" + (m.role === \"user\" ? \"You\" : \"AI Consultant\") + \":</strong> \" + m.text + \"</p>\").join(\"\")}}\n      </div>\n      \n      <p style=\"margin-top: 30px; font-size: 14px; color: #666;\">Best regards,<br>The PineAI Consulting Team</p>\n    </div>\n  </div>\n</body>\n</html>",
-        "options": {}
+        "options": {
+          "allowUnauthorizedCerts": false
+        }
       },
       "id": "send-email",
-      "name": "Send Email",
-      "type": "n8n-nodes-base.emailSend",
+      "name": "Gmail - Send Email",
+      "type": "n8n-nodes-base.gmail",
       "typeVersion": 2,
       "position": [650, 300],
       "credentials": {
-        "smtp": {
-          "id": "2",
-          "name": "Email Account"
+        "gmailOAuth2": {
+          "id": "gmail_oauth",
+          "name": "Gmail Account"
         }
       }
     },
