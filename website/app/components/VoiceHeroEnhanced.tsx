@@ -37,6 +37,7 @@ export default function VoiceHeroEnhanced() {
         const vapiInstance = new VapiSDK('c5045627-4627-46f8-94e1-1279ae22343c');
         
         vapiInstance.on('call-start', () => {
+          console.log('Call started event received');
           if (mounted) {
             setCallStatus('connected');
           }
@@ -60,6 +61,8 @@ export default function VoiceHeroEnhanced() {
         
         vapiInstance.on('message', (message: any) => {
           if (!mounted) return;
+          
+          console.log('Vapi message:', message.type, message);
           
           if (message.type === 'speech-update') {
             setIsSpeaking(message.status === 'started');
@@ -97,7 +100,7 @@ export default function VoiceHeroEnhanced() {
         if (mounted) {
           vapiRef.current = vapiInstance;
           
-          // Start the call
+          // Start the call with no overrides - let the assistant configuration handle the first message
           try {
             await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
           } catch (error) {
@@ -135,16 +138,21 @@ export default function VoiceHeroEnhanced() {
   };
 
   const endCall = async () => {
-    if (vapiRef.current) {
+    console.log('endCall triggered, vapiRef.current:', vapiRef.current);
+    if (vapiRef.current && callStatus === 'connected') {
       try {
+        // First update status to prevent multiple calls
+        setCallStatus('ended');
         await vapiRef.current.stop();
         vapiRef.current.removeAllListeners();
         vapiRef.current = null;
+        setTimeout(() => setShowTranscript(true), 1000);
       } catch (error) {
         console.error('Error stopping call:', error);
+        // Even if error, ensure we transition state
+        setCallStatus('ended');
+        setTimeout(() => setShowTranscript(true), 1000);
       }
-      setCallStatus('ended');
-      setTimeout(() => setShowTranscript(true), 1000);
     }
   };
 
