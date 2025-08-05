@@ -1,5 +1,5 @@
 import Navigation from './components/Navigation';
-import VoiceHeroEnhanced from './components/VoiceHeroEnhanced';
+import VoiceChat from './components/VoiceChat';
 import HowItWorks from './components/HowItWorks';
 import AICapabilities from './components/AICapabilities';
 import FAQ from './components/FAQ';
@@ -10,7 +10,7 @@ export default function Home() {
     <>
       <Navigation />
       <main>
-        <VoiceHeroEnhanced />
+        <VoiceChat />
         <HowItWorks />
         <AICapabilities />
         <FAQ />
