@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Vapi from '@vapi-ai/web';
 
 interface UserData {
   name: string;
@@ -16,111 +15,18 @@ interface VapiChatSDKProps {
 }
 
 export default function VapiChatSDKSimple({ userData, onClose, initialConversation = [] }: VapiChatSDKProps) {
-  const [vapi, setVapi] = useState<any>(null);
-  const [callStatus, setCallStatus] = useState<'idle' | 'connecting' | 'connected' | 'ended'>('idle');
-  const [transcript, setTranscript] = useState<Array<{role: string, text: string}>>([]);
-  const [showForm, setShowForm] = useState(true); // Show form immediately since call already ended
   const [formData, setFormData] = useState({ name: '', email: '', company: '' });
   const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [conversation, setConversation] = useState<Array<{role: string, text: string}>>(initialConversation);
 
+  // Don't initialize Vapi here - we're just showing the form after the call ended
   useEffect(() => {
-    const initializeVapi = async () => {
-      try {
-        const { default: VapiSDK } = await import('@vapi-ai/web');
-        const vapiInstance = new VapiSDK('c5045627-4627-46f8-94e1-1279ae22343c');
-        
-        vapiInstance.on('call-start', () => {
-          setCallStatus('connected');
-        });
-        
-        vapiInstance.on('call-end', () => {
-          setCallStatus('ended');
-          setTimeout(() => setShowForm(true), 1000);
-        });
-        
-        vapiInstance.on('message', (message) => {
-          // Handle speech status updates
-          if (message.type === 'speech-update') {
-            setIsSpeaking(message.status === 'started');
-          }
-          
-          // Handle conversation updates for clean transcript
-          if (message.type === 'conversation-update') {
-            const conversation = message.conversation || [];
-            const formattedConversation = conversation
-              .filter((msg: any) => {
-                // Filter out system messages and empty content
-                if (!msg.role || !msg.content) return false;
-                if (msg.role === 'system') return false;
-                // Filter out the initial system prompt that contains user variables
-                if (msg.role === 'assistant' && msg.content.includes('{{user_')) return false;
-                return true;
-              })
-              .map((msg: any) => ({
-                role: msg.role === 'assistant' ? 'assistant' : 'user',
-                text: msg.content
-              }));
-            setConversation(formattedConversation);
-          }
-          
-          // Still track individual transcripts for real-time display if needed
-          if (message.type === 'transcript' && message.transcript) {
-            setTranscript(prev => [...prev, {
-              role: message.role,
-              text: message.transcript
-            }]);
-          }
-        });
-        
-        vapiInstance.on('error', (error) => {
-          console.error('Vapi error:', error);
-          setCallStatus('ended');
-        });
-        
-        setVapi(vapiInstance);
-        
-        // Start the call after a delay to ensure everything is ready
-        setTimeout(() => {
-          if (vapiInstance) {
-            startCall(vapiInstance);
-          }
-        }, 2000);
-      } catch (error) {
-        console.error('Failed to load Vapi SDK:', error);
-      }
-    };
-    
-    initializeVapi();
-  }, []);
+    // If we have an initial conversation from the parent, use it
+    if (initialConversation && initialConversation.length > 0) {
+      setConversation(initialConversation);
+    }
+  }, [initialConversation]);
 
-  const startCall = async (vapiInstance: any) => {
-    if (!vapiInstance) {
-      console.error('Vapi instance not available');
-      return;
-    }
-    
-    try {
-      setCallStatus('connecting');
-      console.log('Starting Vapi call...');
-      
-      // Start with just the assistant ID, no overrides needed for initial chat
-      await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
-      console.log('Vapi call started successfully');
-    } catch (error) {
-      console.error('Failed to start call:', error);
-      setCallStatus('ended');
-      // Show error to user
-      alert('Unable to start voice chat. Please check your microphone permissions and try again.');
-    }
-  };
-
-  const endCall = async () => {
-    if (vapi) {
-      await vapi.stop();
-    }
-  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +35,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
     console.log('Saving consultation:', {
       sessionId,
       formData,
-      transcript
+      conversation
     });
     
     // For now, just show success
@@ -151,7 +57,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
             
             {/* Transcript Box */}
             <div className="bg-gray-50 rounded-lg p-6 mb-8 max-h-96 overflow-y-auto">
-              {(conversation.length > 0 ? conversation : transcript).map((message, idx) => (
+              {conversation.map((message, idx) => (
                 <div key={idx} className={`mb-4 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
                   <p className="text-sm font-semibold text-gray-600 mb-1">
                     {message.role === 'user' ? 'You' : 'AI Consultant'}

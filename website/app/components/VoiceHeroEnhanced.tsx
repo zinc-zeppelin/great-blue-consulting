@@ -24,12 +24,13 @@ export default function VoiceHeroEnhanced() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Initialize Vapi when user clicks start
   useEffect(() => {
+    if (callStatus !== 'connecting') return;
+    
     let mounted = true;
 
     const initializeAndStartCall = async () => {
-      if (!mounted || callStatus !== 'connecting') return;
-      
       try {
         const { default: VapiSDK } = await import('@vapi-ai/web');
         if (!mounted) return;
@@ -44,14 +45,15 @@ export default function VoiceHeroEnhanced() {
         });
         
         vapiInstance.on('call-end', () => {
+          console.log('Call ended event received');
           if (mounted) {
             setCallStatus('ended');
-            // Clean up immediately
-            if (vapiRef.current) {
-              vapiRef.current.removeAllListeners();
-              vapiRef.current = null;
-            }
+            // Clean up after call ends
             setTimeout(() => {
+              if (vapiRef.current) {
+                vapiRef.current.removeAllListeners();
+                vapiRef.current = null;
+              }
               if (mounted) {
                 setShowTranscript(true);
               }
@@ -89,20 +91,32 @@ export default function VoiceHeroEnhanced() {
           console.error('Vapi error:', error);
           if (mounted) {
             setCallStatus('ended');
-            // Clean up on error too
-            if (vapiRef.current) {
-              vapiRef.current.removeAllListeners();
-              vapiRef.current = null;
-            }
           }
         });
         
         if (mounted) {
           vapiRef.current = vapiInstance;
           
-          // Start the call with no overrides - let the assistant configuration handle the first message
+          // Start the call with assistant overrides to ensure AI speaks first
           try {
-            await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
+            console.log('Starting Vapi call with assistant ID...');
+            const assistantOptions = {
+              model: {
+                provider: "openai",
+                model: "gpt-3.5-turbo",
+                messages: [
+                  {
+                    role: "system",
+                    content: "You are a friendly AI business consultant. Your job is to understand the user's business and explore where AI could make the biggest impact. Start by greeting them warmly and asking about their business."
+                  }
+                ]
+              },
+              firstMessage: "Hey there! I'm your AI business consultant. I'd love to learn about your business and explore where AI could make the biggest impact. What kind of business are you running?",
+              firstMessageMode: "assistant-speaks-first"
+            };
+            
+            const result = await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7', assistantOptions);
+            console.log('Vapi start result:', result);
           } catch (error) {
             console.error('Failed to start call:', error);
             if (mounted) {
@@ -118,20 +132,24 @@ export default function VoiceHeroEnhanced() {
       }
     };
     
-    if (callStatus === 'connecting') {
-      initializeAndStartCall();
-    }
+    initializeAndStartCall();
     
-    // Cleanup function
+    // Cleanup function - only run when this effect re-runs or component unmounts
     return () => {
       mounted = false;
+    };
+  }, [callStatus]); // Keep dependency but structure differently
+
+  // Cleanup on component unmount
+  useEffect(() => {
+    return () => {
       if (vapiRef.current) {
         vapiRef.current.stop();
         vapiRef.current.removeAllListeners();
         vapiRef.current = null;
       }
     };
-  }, [callStatus]);
+  }, []);
 
   const startChat = () => {
     setCallStatus('connecting');
