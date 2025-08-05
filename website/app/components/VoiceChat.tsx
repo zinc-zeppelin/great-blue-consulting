@@ -155,7 +155,7 @@ export default function VoiceChat() {
                       'bg-gray-300'
                     }`}
                     style={{
-                      height: status !== 'idle' && status !== 'ended' ? '24px' : '16px',
+                      height: (status === 'speaking' || status === 'listening' || status === 'connecting') ? '24px' : '16px',
                       animationDelay: `${i * 0.15}s`
                     }}
                   />
