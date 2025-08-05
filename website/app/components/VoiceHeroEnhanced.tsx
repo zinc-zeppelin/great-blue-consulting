@@ -142,22 +142,8 @@ export default function VoiceHeroEnhanced() {
           try {
             console.log('Starting Vapi call with assistant ID...');
             
-            // Use the assistant ID with overrides to ensure we get conversation updates
-            const assistantOverrides = {
-              clientMessages: [
-                "conversation-update",
-                "transcript",
-                "speech-update",
-                "function-call",
-                "hang",
-                "model-output",
-                "status-update",
-                "user-interrupted",
-                "voice-input"
-              ]
-            };
-            
-            const result = await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7', assistantOverrides);
+            // Use the assistant ID without overrides (clientMessages is not a valid override)
+            const result = await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
             console.log('Vapi start result:', result);
           } catch (error) {
             console.error('Failed to start call:', error);
