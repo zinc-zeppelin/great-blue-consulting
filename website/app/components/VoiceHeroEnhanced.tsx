@@ -126,14 +126,14 @@ export default function VoiceHeroEnhanced() {
             console.log('Starting Vapi call with inline assistant...');
             
             // Use inline assistant configuration instead of assistant ID
-            const assistant = {
+            const assistant: any = {
               firstMessage: "Hey there! I'm your AI business consultant. I'd love to learn about your business and explore where AI could make the biggest impact. What kind of business are you running?",
               model: {
                 provider: "openai",
                 model: "gpt-3.5-turbo",
                 messages: [
                   {
-                    role: "system",
+                    role: "system" as const,
                     content: "You are a friendly AI business consultant. Your job is to understand the user's business and explore where AI could make the biggest impact. Be conversational, ask follow-up questions, and provide specific examples of how AI could help their business."
                   }
                 ]
