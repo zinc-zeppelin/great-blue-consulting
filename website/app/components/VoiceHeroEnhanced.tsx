@@ -64,9 +64,10 @@ export default function VoiceHeroEnhanced() {
         vapiInstance.on('message', (message: any) => {
           if (!mounted) return;
           
-          console.log('Vapi message:', message.type, message);
+          console.log('Vapi message:', message.type, JSON.stringify(message));
           
           if (message.type === 'speech-update') {
+            console.log('Speech update:', message.status, message.role);
             setIsSpeaking(message.status === 'started');
           }
           
@@ -97,25 +98,30 @@ export default function VoiceHeroEnhanced() {
         if (mounted) {
           vapiRef.current = vapiInstance;
           
-          // Start the call with assistant overrides to ensure AI speaks first
+          // Start the call with inline assistant configuration to ensure AI speaks first
           try {
-            console.log('Starting Vapi call with assistant ID...');
-            const assistantOptions = {
+            console.log('Starting Vapi call with inline assistant...');
+            
+            // Use inline assistant configuration instead of assistant ID
+            const assistant = {
+              firstMessage: "Hey there! I'm your AI business consultant. I'd love to learn about your business and explore where AI could make the biggest impact. What kind of business are you running?",
               model: {
                 provider: "openai",
                 model: "gpt-3.5-turbo",
                 messages: [
                   {
                     role: "system",
-                    content: "You are a friendly AI business consultant. Your job is to understand the user's business and explore where AI could make the biggest impact. Start by greeting them warmly and asking about their business."
+                    content: "You are a friendly AI business consultant. Your job is to understand the user's business and explore where AI could make the biggest impact. Be conversational, ask follow-up questions, and provide specific examples of how AI could help their business."
                   }
                 ]
               },
-              firstMessage: "Hey there! I'm your AI business consultant. I'd love to learn about your business and explore where AI could make the biggest impact. What kind of business are you running?",
-              firstMessageMode: "assistant-speaks-first"
+              voice: {
+                provider: "playht",
+                voiceId: "jennifer"
+              }
             };
             
-            const result = await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7', assistantOptions);
+            const result = await vapiInstance.start(assistant);
             console.log('Vapi start result:', result);
           } catch (error) {
             console.error('Failed to start call:', error);

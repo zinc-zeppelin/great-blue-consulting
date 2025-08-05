@@ -21,7 +21,7 @@ const { chromium } = require('playwright');
     console.error(`[Page Error]`, err);
   });
   
-  await page.goto('http://localhost:3002');
+  await page.goto('http://localhost:3003');
   
   // Wait for the page to load
   await page.waitForSelector('button:has-text("Start Talking")', { timeout: 10000 });
