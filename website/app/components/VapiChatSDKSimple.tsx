@@ -57,7 +57,10 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
             
             {/* Transcript Box */}
             <div className="bg-gray-50 rounded-lg p-6 mb-8 max-h-96 overflow-y-auto">
-              {conversation.map((message, idx) => (
+              {conversation.length === 0 ? (
+                <p className="text-gray-500 text-center">No conversation recorded. Please ensure you had a conversation before ending the call.</p>
+              ) : (
+                conversation.map((message, idx) => (
                 <div key={idx} className={`mb-4 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
                   <p className="text-sm font-semibold text-gray-600 mb-1">
                     {message.role === 'user' ? 'You' : 'AI Consultant'}
@@ -68,7 +71,8 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                     {message.text}
                   </p>
                 </div>
-              ))}
+              ))
+              )}
             </div>
             
             <div className="border-t pt-8">

@@ -98,6 +98,7 @@ export default function VoiceHeroEnhanced() {
           
           if (message.type === 'conversation-update') {
             const conv = message.conversation || [];
+            console.log('Conversation update - messages:', conv.length);
             const formattedConversation = conv
               .filter((msg: any) => {
                 if (!msg.role || !msg.content) return false;
@@ -109,6 +110,7 @@ export default function VoiceHeroEnhanced() {
                 role: msg.role === 'assistant' ? 'assistant' : 'user',
                 text: msg.content
               }));
+            console.log('Formatted conversation:', formattedConversation.length, 'messages');
             setConversation(formattedConversation);
           }
           
@@ -286,9 +288,7 @@ export default function VoiceHeroEnhanced() {
               <span className="text-gray-900 w-[140px] text-center">
                 {callStatus === 'connecting' && 'Connecting...'}
                 {callStatus === 'connected' && (
-                  speakerRole === 'assistant' ? 'AI is speaking...' :
-                  speakerRole === 'user' ? 'Listening...' :
-                  'Ready to chat...'
+                  isSpeaking ? 'Speaking...' : 'Listening...'
                 )}
                 {callStatus === 'ended' && 'Call ended'}
               </span>
