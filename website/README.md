@@ -1,4 +1,4 @@
-# PineAI Consulting Website
+# Great Blue Consulting Website
 
 AI-powered business consultation platform with voice chat and automated email insights.
 

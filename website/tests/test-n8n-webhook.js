@@ -36,7 +36,7 @@ fetch(webhookUrl, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'X-From': 'PineAI-Test'
+    'X-From': 'GreatBlue-Test'
   },
   body: JSON.stringify(testData)
 })
