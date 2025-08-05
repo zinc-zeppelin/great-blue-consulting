@@ -1,4 +1,3 @@
-import Navigation from './components/Navigation';
 import VoiceChat from './components/VoiceChat';
 import HowItWorks from './components/HowItWorks';
 import AICapabilities from './components/AICapabilities';
@@ -8,7 +7,6 @@ import CTA from './components/CTA';
 export default function Home() {
   return (
     <>
-      <Navigation />
       <main>
         <VoiceChat />
         <HowItWorks />
