@@ -88,7 +88,15 @@ export default function VoiceChat() {
   };
 
   if (showTranscript) {
-    return <VapiChatSDKSimple userData={null} onClose={() => setShowTranscript(false)} initialConversation={conversation} />;
+    return <VapiChatSDKSimple 
+      userData={null} 
+      onClose={() => {
+        setShowTranscript(false);
+        setStatus('idle');  // Reset to idle when returning from form
+        setConversation([]); // Clear conversation for fresh start
+      }} 
+      initialConversation={conversation} 
+    />;
   }
 
   return (

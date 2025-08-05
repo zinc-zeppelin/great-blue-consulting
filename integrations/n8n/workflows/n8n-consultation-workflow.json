@@ -1,0 +1,175 @@
+{
+  "name": "Send follow-up emails",
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "CHATGPT-4O-LATEST"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ JSON.stringify($json.body.conversation) }}"
+            },
+            {
+              "content": "=# Email Drafter Agent System Prompt (JSON Output)\n\nYou are an expert AI business consultant email drafter. Your task is to analyze conversation transcripts between potential clients and an AI business advisor, then compose personalized, actionable follow-up emails.\n\n## Your Role\n- Extract key business challenges and opportunities from the conversation\n- Identify specific areas where AI can provide immediate value\n- Create compelling, personalized recommendations\n- Write in a professional yet conversational tone\n- Focus on actionable next steps\n\n## Input Format\nYou will receive:\n1. Client name, email, and company\n2. Full conversation transcript between the client and AI advisor\n\n## Required Output Format\nYou MUST output your response as valid JSON in exactly this format:\n\n```json\n{\n  \"subject\": \"Your compelling subject line here\",\n  \"body\": \"Your complete email body here with proper formatting\"\n}\n```\n\n## Email Structure\n\n### Subject Line Requirements\n- Reference their specific business or main challenge\n- Include company name when appropriate\n- Be specific and compelling\n- Example: \"3 AI Automation Opportunities for [Company Name]'s Order Processing\"\n\n### Email Body Requirements\n\nThe body should include these sections in order:\n\n1. **Personal Opening** - Reference a specific detail from conversation\n2. **Executive Summary** - 2-3 sentences summarizing their challenges\n3. **Key Opportunities** - 3-5 specific opportunities with impact metrics\n4. **Implementation Roadmap** - Three phases with timelines\n5. **Recommended Tools** - 2-3 specific AI solutions with context\n6. **ROI Projection** - Concrete estimates based on their numbers\n7. **Call-to-Action** - Clear next step\n8. **Professional Closing** - Sign off\n\n## Formatting Instructions\n\nUse these for formatting in the body:\n- Line breaks: Use \\n\\n between paragraphs\n- Bullet points: Use • for bullets\n- Bold: Not supported in plain text, use CAPS for emphasis if needed\n- Keep under 400 words total\n\n## Example Output\n\n```json\n{\n  \"subject\": \"3 Ways AI Can Streamline Your E-commerce Order Processing\",\n  \"body\": \"Hi Sarah,\\n\\nDuring our conversation, you mentioned that managing 20-30 daily orders is becoming overwhelming as your handmade crafts business grows. I've identified several immediate opportunities where AI can help you reclaim hours each day while maintaining the personal touch your customers love.\\n\\nBased on your current challenges with order processing, inventory tracking, and customer communications, here are three high-impact AI solutions that could transform your operations:\\n\\n• Automated Order Processing: Reduce 3 hours of daily order management to 30 minutes\\n• Smart Inventory Alerts: Never run out of popular items or overstock slow movers\\n• AI Customer Response: Handle 80% of customer inquiries automatically\\n\\nImplementation Roadmap:\\n\\nPhase 1 (Next 2 weeks): Set up automated order confirmation and tracking emails\\nPhase 2 (Month 2): Implement inventory prediction system\\nPhase 3 (Months 3-4): Deploy customer service chatbot\\n\\nRecommended Tools:\\n• Zapier + ChatGPT: For order automation ($20/month)\\n• Inventory Planner AI: For stock management ($50/month)\\n• Intercom AI: For customer service ($39/month)\\n\\nROI Projection: Based on your 25 average daily orders, automating order processing alone would save you 2.5 hours per day - that's 75 hours monthly you could reinvest in creating new products or growing your business.\\n\\nWould you like to start with a simple 30-minute pilot project next week? I can help you set up automated order confirmations that will immediately save you an hour each day.\\n\\nLooking forward to helping you scale your business while keeping that handmade quality your customers love.\\n\\nBest regards,\\nThe PineAI Consulting Team\"\n}\n```\n\n## Critical Instructions\n- ALWAYS output valid JSON\n- NEVER include smart quotes or special characters that break JSON\n- Use \\\\n\\\\n for paragraph breaks, not actual line breaks\n- Keep the entire response as a single JSON object\n- Escape any quotes within the text using \\\"\n- Personalize with at least 3 specific details from their conversation\n\nRemember: Output ONLY the JSON object, no additional text or explanation.",
+              "role": "system"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        192,
+        0
+      ],
+      "id": "e5f378d7-9310-49e2-a019-f5bf87e20e49",
+      "name": "Draft email",
+      "credentials": {
+        "openAiApi": {
+          "id": "Zp5XBxiSIkbTZOZq",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "jafamahon@gmail.com",
+        "toEmail": "={{ $('Webhook').item.json.body.formData.email }}",
+        "subject": "={{ $json.choices[0].message.content.subject }}",
+        "html": "={{ $json.choices[0].message.content.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        512,
+        0
+      ],
+      "id": "51646914-6f46-4bfb-9f98-75cb925e9f94",
+      "name": "Send email",
+      "webhookId": "bfb6c7d2-3360-4e46-a54c-e78307c5f6ab",
+      "credentials": {
+        "smtp": {
+          "id": "qY5iGvFrQNaGoKrn",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "consultation",
+        "options": {}
+      },
+      "id": "05dc3d05-3c8d-4b7a-9bf4-74ff9ddf2811",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "consultation"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "primary-production-d8cb.up.railway.app",
+            "user-agent": "node",
+            "content-length": "624",
+            "accept": "*/*",
+            "accept-encoding": "br, gzip, deflate",
+            "accept-language": "*",
+            "content-type": "application/json",
+            "sec-fetch-mode": "cors",
+            "x-forwarded-for": "64.223.71.169",
+            "x-forwarded-host": "primary-production-d8cb.up.railway.app",
+            "x-forwarded-proto": "https",
+            "x-from": "PineAI-Test",
+            "x-railway-edge": "railway/us-east4-eqdc4a",
+            "x-railway-request-id": "85xOsTObQruidsTKAax-fw",
+            "x-real-ip": "64.223.71.169",
+            "x-request-start": "1754364308227"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "sessionId": "test-1754364309075",
+            "formData": {
+              "name": "Test User",
+              "email": "test@example.com",
+              "company": "Test Company"
+            },
+            "conversation": [
+              {
+                "role": "assistant",
+                "text": "Hey there! I'm your AI business consultant. What kind of business are you running?"
+              },
+              {
+                "role": "user",
+                "text": "I run a small e-commerce store selling handmade crafts."
+              },
+              {
+                "role": "assistant",
+                "text": "That's wonderful! E-commerce has so many opportunities for AI automation. How many orders do you typically process per day?"
+              },
+              {
+                "role": "user",
+                "text": "About 20-30 orders daily, but it's growing fast and becoming hard to manage."
+              }
+            ],
+            "timestamp": "2025-08-05T03:25:09.075Z"
+          },
+          "webhookUrl": "https://primary-production-d8cb.up.railway.app/webhook/consultation",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Draft email": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Draft email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b293adda-59c4-4d46-a697-c06000c13e0f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6798be6417803ebb2ffecc6857310223ebdfcfb2febc8d79ef14931c96361404"
+  },
+  "id": "vWFESu6LAwkesmGn",
+  "tags": []
+}
