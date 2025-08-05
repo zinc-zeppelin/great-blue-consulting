@@ -18,6 +18,8 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
   const [formData, setFormData] = useState({ name: '', email: '', company: '' });
   const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const [conversation, setConversation] = useState<Array<{role: string, text: string}>>(initialConversation);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   // Don't initialize Vapi here - we're just showing the form after the call ended
   useEffect(() => {
@@ -30,19 +32,42 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
     
-    // Here you would send the form data and transcript to your backend
-    console.log('Saving consultation:', {
-      sessionId,
-      formData,
-      conversation
-    });
-    
-    // For now, just show success
-    alert('Your consultation has been saved! We\'ll email you the full transcript.');
-    
-    if (onClose) {
-      onClose();
+    try {
+      // Send to n8n webhook endpoint
+      const response = await fetch('/api/consultation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          formData,
+          conversation,
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send consultation data');
+      }
+
+      setSubmitStatus('success');
+      
+      // Wait a moment to show success message
+      setTimeout(() => {
+        if (onClose) {
+          onClose();
+        }
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Error submitting consultation:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -116,15 +141,36 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                 
                 <button
                   type="submit"
-                  className="w-full py-3 px-6 text-white font-semibold bg-green-600 rounded-lg hover:bg-green-700 transition duration-200"
+                  disabled={isSubmitting}
+                  className={`w-full py-3 px-6 text-white font-semibold rounded-lg transition duration-200 ${
+                    isSubmitting 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-green-600 hover:bg-green-700'
+                  }`}
                 >
-                  Email Me AI Insights & Ideas
+                  {isSubmitting ? 'Sending...' : 'Email Me AI Insights & Ideas'}
                 </button>
               </form>
               
-              <p className="text-sm text-gray-600 mt-4 text-center">
-                We'll send you the transcript plus personalized AI implementation ideas for your business
-              </p>
+              {submitStatus === 'success' && (
+                <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                  <p className="font-semibold">Success!</p>
+                  <p className="text-sm">Your AI insights are being prepared and will be emailed to you shortly.</p>
+                </div>
+              )}
+              
+              {submitStatus === 'error' && (
+                <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                  <p className="font-semibold">Error</p>
+                  <p className="text-sm">Failed to send your consultation. Please try again or contact support.</p>
+                </div>
+              )}
+              
+              {submitStatus === 'idle' && (
+                <p className="text-sm text-gray-600 mt-4 text-center">
+                  We'll send you the transcript plus personalized AI implementation ideas for your business
+                </p>
+              )}
             </div>
           </div>
         </div>
