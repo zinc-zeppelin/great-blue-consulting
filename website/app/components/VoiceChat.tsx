@@ -145,7 +145,7 @@ export default function VoiceChat() {
           <div className="inline-flex items-center justify-center px-12 py-6 text-xl font-semibold">
             <div className="relative bg-white/90 backdrop-blur-sm rounded-full shadow-2xl px-8 py-4 flex items-center space-x-4">
               {/* Voice visualization */}
-              <div className="flex space-x-1">
+              <div className="flex space-x-1 items-center h-6">
                 {[...Array(5)].map((_, i) => (
                   <div
                     key={i}
