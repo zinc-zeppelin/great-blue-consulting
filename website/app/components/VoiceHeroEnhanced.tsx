@@ -79,7 +79,10 @@ export default function VoiceHeroEnhanced() {
         vapiInstance.on('message', (message: any) => {
           if (!mounted) return;
           
-          console.log('Vapi message:', message.type, JSON.stringify(message));
+          // Only log important messages
+          if (message.type === 'speech-update' || message.type === 'conversation-update') {
+            console.log('Vapi message:', message.type);
+          }
           
           if (message.type === 'speech-update') {
             console.log('Speech update:', message.status, message.role);
@@ -110,10 +113,10 @@ export default function VoiceHeroEnhanced() {
           }
         });
         
-        // Add volume level monitoring
-        vapiInstance.on('volume-level', (volume: number) => {
-          console.log('Volume level:', volume);
-        });
+        // Volume level monitoring (commented out for production)
+        // vapiInstance.on('volume-level', (volume: number) => {
+        //   console.log('Volume level:', volume);
+        // });
         
         if (mounted) {
           vapiRef.current = vapiInstance;
@@ -297,12 +300,7 @@ export default function VoiceHeroEnhanced() {
               {/* Status text with fixed width */}
               <span className="text-gray-900 w-[140px] text-center">
                 {callStatus === 'connecting' && 'Connecting...'}
-                {callStatus === 'connected' && (
-                  <>
-                    {console.log('Render - isSpeaking:', isSpeaking)}
-                    {isSpeaking ? 'AI is speaking...' : 'Listening...'}
-                  </>
-                )}
+                {callStatus === 'connected' && (isSpeaking ? 'AI is speaking...' : 'Listening...')}
                 {callStatus === 'ended' && 'Call ended'}
               </span>
               
