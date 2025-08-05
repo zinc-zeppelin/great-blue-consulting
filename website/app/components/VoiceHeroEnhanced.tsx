@@ -61,6 +61,21 @@ export default function VoiceHeroEnhanced() {
           }
         });
         
+        // Add speech events
+        vapiInstance.on('speech-start', () => {
+          console.log('Speech started - setting isSpeaking to true');
+          if (mounted) {
+            setIsSpeaking(true);
+          }
+        });
+        
+        vapiInstance.on('speech-end', () => {
+          console.log('Speech ended - setting isSpeaking to false');
+          if (mounted) {
+            setIsSpeaking(false);
+          }
+        });
+        
         vapiInstance.on('message', (message: any) => {
           if (!mounted) return;
           
@@ -95,6 +110,11 @@ export default function VoiceHeroEnhanced() {
           }
         });
         
+        // Add volume level monitoring
+        vapiInstance.on('volume-level', (volume: number) => {
+          console.log('Volume level:', volume);
+        });
+        
         if (mounted) {
           vapiRef.current = vapiInstance;
           
@@ -118,7 +138,19 @@ export default function VoiceHeroEnhanced() {
               voice: {
                 provider: "playht",
                 voiceId: "jennifer"
-              }
+              },
+              // Explicitly enable client messages we need
+              clientMessages: [
+                "conversation-update",
+                "function-call",
+                "hang",
+                "model-output",
+                "speech-update",
+                "status-update",
+                "transcript",
+                "user-interrupted",
+                "voice-input"
+              ]
             };
             
             const result = await vapiInstance.start(assistant);
@@ -265,7 +297,12 @@ export default function VoiceHeroEnhanced() {
               {/* Status text with fixed width */}
               <span className="text-gray-900 w-[140px] text-center">
                 {callStatus === 'connecting' && 'Connecting...'}
-                {callStatus === 'connected' && (isSpeaking ? 'AI is speaking' : 'Listening...')}
+                {callStatus === 'connected' && (
+                  <>
+                    {console.log('Render - isSpeaking:', isSpeaking)}
+                    {isSpeaking ? 'AI is speaking...' : 'Listening...'}
+                  </>
+                )}
                 {callStatus === 'ended' && 'Call ended'}
               </span>
               
