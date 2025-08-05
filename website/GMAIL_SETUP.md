@@ -91,8 +91,8 @@ If OAuth2 doesn't work, use SMTP:
 
 ## Your Specific URLs
 
-- **n8n Dashboard**: https://n8n-railway-production-f3d61.up.railway.app
-- **Webhook URL**: https://n8n-railway-production-f3d61.up.railway.app/webhook/consultation
+- **n8n Dashboard**: https://primary-production-d8cb.up.railway.app
+- **Webhook URL**: https://primary-production-d8cb.up.railway.app/webhook/consultation
 - **Test locally**: `npm run dev` then visit http://localhost:3001
 
 ## Next Steps
