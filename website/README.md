@@ -39,7 +39,7 @@ website/
 ## Key Components
 
 - **VoiceChat.tsx**: Main voice interaction component
-- **VapiChatSDKSimple.tsx**: Post-chat form and transcript display
+- **VapiChatSDKSimple.tsx**: Post-chat form and lead capture
 - **workflows/n8n-consultation-workflow.json**: Email automation workflow
 
 ## Deployment

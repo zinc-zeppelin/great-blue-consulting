@@ -168,7 +168,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
               
               {submitStatus === 'idle' && (
                 <p className="text-sm text-gray-600 mt-4 text-center">
-                  We'll send you the transcript plus personalized AI implementation ideas for your business
+                  We'll send you personalized AI implementation ideas and insights tailored to your business
                 </p>
               )}
             </div>
