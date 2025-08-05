@@ -9,6 +9,7 @@ export default function VoiceHeroEnhanced() {
   const vapiRef = useRef<any>(null);
   const [callStatus, setCallStatus] = useState<'idle' | 'connecting' | 'connected' | 'ended'>('idle');
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speakerRole, setSpeakerRole] = useState<'assistant' | 'user' | null>(null);
   const [conversation, setConversation] = useState<Array<{role: string, text: string}>>([]);
   const [showTranscript, setShowTranscript] = useState(false);
 
@@ -81,12 +82,18 @@ export default function VoiceHeroEnhanced() {
           
           // Only log important messages
           if (message.type === 'speech-update' || message.type === 'conversation-update') {
-            console.log('Vapi message:', message.type);
+            console.log('Vapi message:', message.type, message);
           }
           
           if (message.type === 'speech-update') {
             console.log('Speech update:', message.status, message.role);
-            setIsSpeaking(message.status === 'started');
+            if (message.status === 'started') {
+              setIsSpeaking(true);
+              setSpeakerRole(message.role || 'assistant');
+            } else if (message.status === 'stopped') {
+              setIsSpeaking(false);
+              setSpeakerRole(null);
+            }
           }
           
           if (message.type === 'conversation-update') {
@@ -103,6 +110,14 @@ export default function VoiceHeroEnhanced() {
                 text: msg.content
               }));
             setConversation(formattedConversation);
+          }
+          
+          // Check for transcript events to determine who is speaking
+          if (message.type === 'transcript') {
+            console.log('Transcript:', message.role, message.transcriptType);
+            if (message.transcriptType === 'partial') {
+              setSpeakerRole(message.role);
+            }
           }
         });
         
@@ -121,42 +136,12 @@ export default function VoiceHeroEnhanced() {
         if (mounted) {
           vapiRef.current = vapiInstance;
           
-          // Start the call with inline assistant configuration to ensure AI speaks first
+          // Start the call with the specified assistant ID
           try {
-            console.log('Starting Vapi call with inline assistant...');
+            console.log('Starting Vapi call with assistant ID...');
             
-            // Use inline assistant configuration instead of assistant ID
-            const assistant: any = {
-              firstMessage: "Hey there! I'm your AI business consultant. I'd love to learn about your business and explore where AI could make the biggest impact. What kind of business are you running?",
-              model: {
-                provider: "openai",
-                model: "gpt-3.5-turbo",
-                messages: [
-                  {
-                    role: "system" as const,
-                    content: "You are a friendly AI business consultant. Your job is to understand the user's business and explore where AI could make the biggest impact. Be conversational, ask follow-up questions, and provide specific examples of how AI could help their business."
-                  }
-                ]
-              },
-              voice: {
-                provider: "playht",
-                voiceId: "jennifer"
-              },
-              // Explicitly enable client messages we need
-              clientMessages: [
-                "conversation-update",
-                "function-call",
-                "hang",
-                "model-output",
-                "speech-update",
-                "status-update",
-                "transcript",
-                "user-interrupted",
-                "voice-input"
-              ]
-            };
-            
-            const result = await vapiInstance.start(assistant);
+            // Use the assistant ID you specified
+            const result = await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
             console.log('Vapi start result:', result);
           } catch (error) {
             console.error('Failed to start call:', error);
@@ -300,7 +285,11 @@ export default function VoiceHeroEnhanced() {
               {/* Status text with fixed width */}
               <span className="text-gray-900 w-[140px] text-center">
                 {callStatus === 'connecting' && 'Connecting...'}
-                {callStatus === 'connected' && (isSpeaking ? 'AI is speaking...' : 'Listening...')}
+                {callStatus === 'connected' && (
+                  speakerRole === 'assistant' ? 'AI is speaking...' :
+                  speakerRole === 'user' ? 'Listening...' :
+                  'Ready to chat...'
+                )}
                 {callStatus === 'ended' && 'Call ended'}
               </span>
               
