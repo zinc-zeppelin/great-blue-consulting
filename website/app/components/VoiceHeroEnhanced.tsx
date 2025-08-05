@@ -12,6 +12,7 @@ export default function VoiceHeroEnhanced() {
   const [speakerRole, setSpeakerRole] = useState<'assistant' | 'user' | null>(null);
   const [conversation, setConversation] = useState<Array<{role: string, text: string}>>([]);
   const [showTranscript, setShowTranscript] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -62,11 +63,12 @@ export default function VoiceHeroEnhanced() {
           }
         });
         
-        // Add speech events
+        // Add speech events with force update
         vapiInstance.on('speech-start', () => {
           console.log('Speech started - setting isSpeaking to true');
           if (mounted) {
             setIsSpeaking(true);
+            setForceUpdate(prev => prev + 1); // Force re-render
           }
         });
         
@@ -74,15 +76,18 @@ export default function VoiceHeroEnhanced() {
           console.log('Speech ended - setting isSpeaking to false');
           if (mounted) {
             setIsSpeaking(false);
+            setForceUpdate(prev => prev + 1); // Force re-render
           }
         });
         
         vapiInstance.on('message', (message: any) => {
           if (!mounted) return;
           
-          // Only log important messages
-          if (message.type === 'speech-update' || message.type === 'conversation-update') {
-            console.log('Vapi message:', message.type, message);
+          // Log ALL messages
+          console.log('Vapi message type:', message.type);
+          
+          if (message.type === 'speech-update' || message.type === 'conversation-update' || message.type === 'transcript') {
+            console.log('Important message:', message.type, JSON.stringify(message));
           }
           
           if (message.type === 'speech-update') {
@@ -138,12 +143,33 @@ export default function VoiceHeroEnhanced() {
         if (mounted) {
           vapiRef.current = vapiInstance;
           
-          // Start the call with the specified assistant ID
+          // Start the call with inline assistant to ensure we get messages
           try {
-            console.log('Starting Vapi call with assistant ID...');
+            console.log('Starting Vapi call with inline assistant...');
             
-            // Use the assistant ID without overrides (clientMessages is not a valid override)
-            const result = await vapiInstance.start('e5ff7a8b-b4a5-4e78-916c-40dd483c23d7');
+            // Use inline assistant with explicit configuration
+            const assistant: any = {
+              firstMessage: "Hey there! I'm your AI business consultant. I'd love to learn about your business and explore where AI could make the biggest impact. What kind of business are you running?",
+              model: {
+                provider: "openai",
+                model: "gpt-3.5-turbo",
+                messages: [{
+                  role: "system",
+                  content: "You are a friendly AI business consultant. Your job is to understand the user's business and explore where AI could make the biggest impact. Be conversational, ask follow-up questions, and provide specific examples of how AI could help their business."
+                }]
+              },
+              voice: {
+                provider: "playht",
+                voiceId: "jennifer"
+              },
+              transcriber: {
+                provider: "deepgram",
+                model: "nova-2",
+                language: "en"
+              }
+            };
+            
+            const result = await vapiInstance.start(assistant);
             console.log('Vapi start result:', result);
           } catch (error) {
             console.error('Failed to start call:', error);
@@ -264,53 +290,44 @@ export default function VoiceHeroEnhanced() {
           </button>
         ) : (
           <div className="inline-flex items-center justify-center px-12 py-6 text-xl font-semibold">
-            {/* Active call container - more compact */}
-            <div className="relative bg-white/90 backdrop-blur-sm rounded-full shadow-2xl px-6 py-3 flex items-center space-x-3">
-              {/* Status indicator dot */}
-              <div className="relative">
-                <div className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  callStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' :
-                  callStatus === 'connected' && isSpeaking ? 'bg-green-500' :
-                  callStatus === 'connected' ? 'bg-blue-500' :
-                  'bg-gray-400'
-                }`} />
-                {callStatus === 'connected' && isSpeaking && (
-                  <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
-                )}
-              </div>
-              
-              {/* Voice visualization bars */}
+            {/* Active call container with text status */}
+            <div className="relative bg-white/90 backdrop-blur-sm rounded-full shadow-2xl px-8 py-4 flex items-center space-x-4">
+              {/* Voice visualization */}
               <div className="flex space-x-1">
                 {[...Array(5)].map((_, i) => (
                   <div
                     key={i}
-                    className={`w-1.5 rounded-full transition-all duration-300 ${
+                    className={`w-2 rounded-full transition-all duration-300 ${
                       callStatus === 'connected' && isSpeaking ? 'bg-green-500 animate-voice-bar' : 
                       callStatus === 'connected' ? 'bg-blue-500' : 
                       'bg-gray-300'
                     }`}
                     style={{
-                      height: callStatus === 'connected' && isSpeaking ? '20px' : '12px',
+                      height: callStatus === 'connected' ? '24px' : '16px',
                       animationDelay: `${i * 0.15}s`
                     }}
                   />
                 ))}
               </div>
               
+              {/* Status text */}
+              <span className="text-gray-900 font-medium">
+                {callStatus === 'connecting' && 'Connecting...'}
+                {callStatus === 'connected' && (isSpeaking ? 'Speaking...' : 'Listening...')}
+                {callStatus === 'ended' && 'Call ended'}
+              </span>
+              
               {/* End call button */}
-              <button
-                onClick={endCall}
-                className={`p-2 rounded-full transition-all duration-200 ${
-                  callStatus === 'connected' 
-                    ? 'bg-red-500 text-white hover:bg-red-600' 
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-                disabled={callStatus !== 'connected'}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              {callStatus === 'connected' && (
+                <button
+                  onClick={endCall}
+                  className="ml-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         )}
