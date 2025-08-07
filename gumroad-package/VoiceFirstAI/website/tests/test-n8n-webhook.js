@@ -1,5 +1,5 @@
 // Test script for n8n webhook
-const webhookUrl = 'https://n8n.greatblueai.com/webhook/consultation';
+const webhookUrl = 'https://primary-production-d8cb.up.railway.app/webhook/consultation';
 
 const testData = {
   sessionId: `test-${Date.now()}`,

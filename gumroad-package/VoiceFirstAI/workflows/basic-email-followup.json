@@ -1,0 +1,87 @@
+{
+  "name": "VoiceFirst AI - Basic Email Follow-up",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice-consultation",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook - Receive Consultation",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system", 
+              "content": "You are an AI assistant that analyzes business consultations and creates personalized follow-up emails. Extract key insights and provide actionable recommendations.\n\nOutput Format:\n{\n  \"subject\": \"Compelling subject line\",\n  \"body\": \"HTML formatted email body\"\n}\n\nStructure:\n1. Personal greeting referencing their business\n2. Summary of main challenges discussed\n3. 3-5 specific AI automation opportunities\n4. Clear call-to-action to book a strategy call\n5. Professional sign-off\n\nUse HTML tags for formatting. Keep it under 400 words."
+            },
+            {
+              "content": "=Analyze this consultation and create a follow-up email:\n\nBusiness: {{ $json.body.formData.company }}\nContact: {{ $json.body.formData.name }}\n\nConversation:\n{{ JSON.stringify($json.body.conversation) }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "openai-analyze",
+      "name": "OpenAI - Generate Email",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.SMTP_FROM_EMAIL }}",
+        "toEmail": "={{ $('Webhook - Receive Consultation').item.json.body.formData.email }}",
+        "subject": "={{ $json.subject }}",
+        "html": "={{ $json.body }}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - Receive Consultation": {
+      "main": [
+        [
+          {
+            "node": "OpenAI - Generate Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI - Generate Email": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

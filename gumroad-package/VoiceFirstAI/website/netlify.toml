@@ -11,7 +11,7 @@
 
 [[redirects]]
   from = "/api/consultation"
-  to = "https://n8n.greatblueai.com/webhook/consultation"
+  to = "https://primary-production-d8cb.up.railway.app/webhook/consultation"
   status = 200
   force = true
   [redirects.headers]
