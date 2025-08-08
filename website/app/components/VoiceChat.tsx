@@ -121,14 +121,14 @@ export default function VoiceChat() {
       {/* Content */}
       <div className="relative z-10 text-center px-4">
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-          <span className="block">Talk to My AI Assistant</span>
+          <span className="block">From Chaos to Clarity</span>
           <span className="block bg-gradient-to-r from-[#4FC3D1] via-white to-[#23A6B5] bg-clip-text text-transparent">
-            Let's Fix Your Chaos
+            In One Conversation
           </span>
         </h1>
         
         <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto">
-          Quick conversation. Custom AI solutions. Delivered to your inbox.
+          Quick assessment. Custom automation plan. Emailed right after.
         </p>
 
         {status === 'idle' ? (
