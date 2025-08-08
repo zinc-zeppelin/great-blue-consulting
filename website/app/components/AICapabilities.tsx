@@ -7,154 +7,162 @@ export default function AICapabilities() {
 
   const capabilities = [
     {
-      title: "Business Process Analysis",
-      description: "Identify bottlenecks and inefficiencies in your workflows",
-      gradient: "from-purple-500 to-pink-500",
+      title: "Stop Drowning in Repetitive Tasks",
+      description: "I'll identify and eliminate the busywork that's eating your time",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
       examples: [
         {
-          level: "Simple",
-          title: "Email Workflow Automation",
-          description: "Auto-categorize and route emails, draft responses with AI"
+          title: "Email Chaos → Smart Inbox",
+          description: "Auto-categorize, route, and draft responses. Your inbox practically manages itself."
         },
         {
-          level: "Medium",
-          title: "Document Processing Pipeline",
-          description: "Extract data from PDFs, validate information, and update systems automatically"
+          title: "Manual Data Entry → Automated Processing",
+          description: "Extract data from PDFs, emails, and forms. Update all your systems automatically."
         },
         {
-          level: "Complex",
-          title: "End-to-End Process Orchestration",
-          description: "Multi-step workflows with conditional logic, approvals, and cross-system integration"
+          title: "Scattered Workflows → Orchestrated Processes",
+          description: "Connect your tools so they work together. One trigger, multiple actions, zero manual steps."
         }
       ]
     },
     {
-      title: "Customer Support Automation",
-      description: "Intelligent chatbots and ticket routing systems",
-      gradient: "from-blue-500 to-cyan-500",
+      title: "Turn Customer Frustration into Loyalty",
+      description: "Give customers instant answers while your team focuses on complex issues",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+        </svg>
+      ),
       examples: [
         {
-          level: "Simple",
-          title: "FAQ Chatbot",
-          description: "Answer common questions 24/7, reduce support tickets by 60%"
+          title: "24/7 Instant Responses",
+          description: "Smart chatbots answer common questions immediately, any time of day or night."
         },
         {
-          level: "Medium",
-          title: "Intelligent Ticket Routing",
-          description: "AI categorizes and assigns tickets to the right team automatically"
+          title: "Smart Ticket Routing",
+          description: "AI reads, categorizes, and assigns tickets to the right person instantly."
         },
         {
-          level: "Complex",
-          title: "Omnichannel Support AI",
-          description: "Unified AI across chat, email, phone with sentiment analysis and escalation"
+          title: "Unified Support Experience",
+          description: "Whether customers call, email, or chat, they get consistent, intelligent help."
         }
       ]
     },
     {
-      title: "Sales Intelligence",
-      description: "Lead scoring and automated follow-up sequences",
-      gradient: "from-green-500 to-emerald-500",
+      title: "Close More Deals Without More Effort",
+      description: "Let AI handle the follow-ups while you focus on relationships",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      ),
       examples: [
         {
-          level: "Simple",
-          title: "Lead Scoring Automation",
-          description: "AI ranks leads by likelihood to convert, focus on hot prospects"
+          title: "Know Who's Ready to Buy",
+          description: "AI scores leads based on behavior, so you call the right people at the right time."
         },
         {
-          level: "Medium",
-          title: "Personalized Outreach Sequences",
-          description: "AI crafts follow-ups based on prospect behavior and engagement"
+          title: "Personalized Follow-Ups on Autopilot",
+          description: "Each prospect gets tailored messages based on their interests and engagement."
         },
         {
-          level: "Complex",
-          title: "Predictive Sales Analytics",
-          description: "Forecast deals, identify at-risk accounts, optimize pricing strategies"
+          title: "Predict and Prevent Churn",
+          description: "Identify at-risk accounts before they leave, with actionable insights to keep them."
         }
       ]
     },
     {
-      title: "Data Analytics",
-      description: "Real-time insights and predictive modeling",
-      gradient: "from-orange-500 to-red-500",
+      title: "Make Decisions with Real Data, Not Gut Feelings",
+      description: "See what's actually happening in your business, in real-time",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+        </svg>
+      ),
       examples: [
         {
-          level: "Simple",
-          title: "Automated Reporting Dashboards",
-          description: "Real-time KPIs and metrics without manual spreadsheet work"
+          title: "Live Dashboards, Zero Spreadsheets",
+          description: "All your KPIs update automatically. No more Monday morning report scrambles."
         },
         {
-          level: "Medium",
-          title: "Predictive Maintenance",
-          description: "AI predicts equipment failures before they happen"
+          title: "Spot Problems Before They Happen",
+          description: "AI identifies trends and anomalies you'd never catch manually."
         },
         {
-          level: "Complex",
-          title: "Multi-Modal AI Analytics",
-          description: "Combine text, voice, and visual data for comprehensive insights"
+          title: "One Source of Truth",
+          description: "Pull data from all your tools into one clear, actionable view."
         }
       ]
     }
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white" id="capabilities">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            AI Capabilities That Drive Results
+            What I Can Fix for You
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Our AI consultant analyzes your specific needs and recommends the perfect automation solutions
+            Real solutions to the problems that keep you up at night
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {capabilities.map((capability, index) => (
-            <div key={index} className="group relative overflow-hidden rounded-2xl bg-gray-50 p-8 hover:shadow-xl transition-all duration-300">
-              {/* Background gradient on hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${capability.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-              
-              <div className="relative z-10">
-                <div className="mb-4">
-                  <h3 className="text-2xl font-bold text-gray-900">{capability.title}</h3>
+            <div key={index} className="relative overflow-hidden rounded-2xl bg-gray-50 hover:bg-[#23A6B5]/5 border border-gray-200 hover:border-[#23A6B5] transition-all duration-300">
+              <div className="p-8">
+                {/* Icon and Title */}
+                <div className="flex items-start mb-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-[#23A6B5]/10 rounded-lg flex items-center justify-center text-[#23A6B5] mr-4">
+                    {capability.icon}
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 flex-1">{capability.title}</h3>
                 </div>
+                
                 <p className="text-gray-600 text-lg mb-6">{capability.description}</p>
                 
-                {/* Expandable Examples Button */}
+                {/* Expandable Examples Button - Much more obvious */}
                 <button
                   onClick={() => setExpandedCard(expandedCard === index ? null : index)}
-                  className="inline-flex items-center text-gray-900 font-semibold hover:text-green-600 transition-colors duration-200"
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${
+                    expandedCard === index 
+                      ? 'bg-[#23A6B5] text-white' 
+                      : 'bg-[#23A6B5]/10 text-[#23A6B5] hover:bg-[#23A6B5]/20'
+                  }`}
                 >
-                  <span>View implementation examples</span>
-                  <svg 
-                    className={`w-5 h-5 ml-2 transform transition-transform duration-200 ${
-                      expandedCard === index ? 'rotate-180' : ''
-                    }`} 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7 7" />
-                  </svg>
+                  <span className="font-semibold">
+                    {expandedCard === index ? 'Hide Examples' : 'See Real Examples'}
+                  </span>
+                  <div className="flex items-center">
+                    <span className="text-sm mr-2">
+                      {expandedCard === index ? 'Click to close' : 'Click to expand'}
+                    </span>
+                    <svg 
+                      className={`w-5 h-5 transform transition-transform duration-200 ${
+                        expandedCard === index ? 'rotate-180' : ''
+                      }`} 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
                 </button>
                 
                 {/* Examples Content */}
-                <div className={`mt-6 space-y-4 overflow-hidden transition-all duration-300 ${
-                  expandedCard === index ? 'max-h-96' : 'max-h-0'
+                <div className={`mt-6 space-y-4 overflow-hidden transition-all duration-500 ${
+                  expandedCard === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 }`}>
                   {capability.examples.map((example, exIdx) => (
-                    <div key={exIdx} className="border-l-4 border-gradient-to-r from-green-500 to-blue-600 pl-4 py-2">
-                      <div className="flex items-center mb-1">
-                        <span className={`text-xs font-semibold px-2 py-1 rounded-full mr-2 ${
-                          example.level === 'Simple' ? 'bg-blue-100 text-blue-700' :
-                          example.level === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-purple-100 text-purple-700'
-                        }`}>
-                          {example.level}
-                        </span>
-                        <h4 className="font-semibold text-gray-900">{example.title}</h4>
-                      </div>
-                      <p className="text-sm text-gray-600">{example.description}</p>
+                    <div key={exIdx} className="bg-white rounded-lg p-4 border-l-4 border-[#23A6B5]">
+                      <h4 className="font-semibold text-gray-900 mb-2">{example.title}</h4>
+                      <p className="text-gray-600">{example.description}</p>
                     </div>
                   ))}
                 </div>
@@ -163,6 +171,21 @@ export default function AICapabilities() {
           ))}
         </div>
 
+        {/* Bottom CTA */}
+        <div className="mt-16 text-center">
+          <p className="text-lg text-gray-600 mb-6">
+            Every business is different. Let's talk about your specific challenges.
+          </p>
+          <a
+            href="#cta"
+            className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-[#23A6B5] rounded-full hover:bg-[#1A8A94] transition-all duration-200 transform hover:scale-105"
+          >
+            Tell Me About Your Chaos
+            <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+        </div>
       </div>
     </section>
   );
