@@ -1,4 +1,5 @@
 import VoiceChat from './components/VoiceChat';
+import AboutJake from './components/AboutJake';
 import HowItWorks from './components/HowItWorks';
 import AICapabilities from './components/AICapabilities';
 import FAQ from './components/FAQ';
@@ -9,6 +10,7 @@ export default function Home() {
     <>
       <main>
         <VoiceChat />
+        <AboutJake />
         <HowItWorks />
         <AICapabilities />
         <FAQ />

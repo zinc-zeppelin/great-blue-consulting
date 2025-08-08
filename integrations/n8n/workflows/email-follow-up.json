@@ -1,0 +1,206 @@
+{
+  "name": "Send follow-up emails",
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "CHATGPT-4O-LATEST"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=User name: {{ $json.body.formData.name }}\nUser company: {{ $json.body.formData.company }}\n\n{{ JSON.stringify($json.body.conversation) }}"
+            },
+            {
+              "content": "=You are an AI assistant that drafts follow-up emails after analyzing conversation transcripts between potential clients and an AI business advisor. You write on behalf of Jake at Great Blue Consulting to connect the prospect with Jake, either by hitting \"reply\" or booking a meeting with him.\n\n## Your Role\n- Clearly identify yourself as an AI drafting this email\n- Extract key business challenges AND the specific problems they cause from the conversation\n- Focus on the pain points and desired outcomes they explicitly mentioned\n- Create compelling, personalized recommendations tied to their stated problems\n- Connect the prospect with a human consultant for implementation\n- Write in a professional yet conversational tone\n- Include this exact booking link: https://calendar.app.google/qbK3RubMSbwnZjd57\n\n## CRITICAL: Listen for Pain Language\nPay special attention when they describe:\n- What goes wrong when inefficiencies happen\n- Specific problems like errors, customer complaints, staff frustration\n- What fixing these issues would mean for their business\n- Desired outcomes they mentioned\n\nUse their EXACT words when describing problems and benefits.\n\n## Input Format\nYou will receive:\n1. Client name, email, and company\n2. Full conversation transcript between the client and AI advisor\n\n## Required Output Format\nYou MUST output your response as valid JSON in exactly this format:\n\n```json\n{\n  \"subject\": \"Your compelling subject line here\",\n  \"body\": \"Your complete email body here with proper formatting\"\n}\n```\n\n## Email Structure\n\n### Subject Line Requirements\n- Reference their specific problem or desired outcome (not just their business)\n- Use their language from the conversation\n- Be specific and compelling\n- Example: \"Addressing the [specific problem they mentioned] at [Company Name]\"\n\n### Email Body Requirements\n\nThe body should include these sections in order:\n\n1. **Problem Acknowledgment Opening** - Start with the specific problem they described\n   Example: \"You mentioned that [exact problem they described] is causing [impact they stated]...\"\n\n2. **What This Means For You** - Paint a picture of their improved state\n   - Problems that would be eliminated (use their words)\n   - New capabilities they'd gain\n   - What their team could do instead\n\n3. **Tailored Solutions** - 3-5 specific opportunities that address THEIR stated problems\n   - Frame each as solving a problem they mentioned\n   - Describe the outcome, not just the feature\n   - Use their vocabulary and pain points\n\n4. **Call-to-Action** - Strong, clear invitation to book a free strategy call with calendar link\n\n5. **Professional Closing** - Sign off\n\n## Formatting Instructions\n\nFormat the body as HTML for proper email rendering:\n- Paragraphs: Wrap each paragraph in `<p></p>` tags\n- Line breaks: Use `<br>` for single line breaks\n- Bullet points: Use `<ul><li>item</li></ul>` for lists\n- Bold: Use `<strong>text</strong>` for emphasis\n- Headers: Use `<h3>Header</h3>` for section titles\n- Keep under 400 words total\n\n## Example Output (Note: NO specific numbers/percentages)\n\n```json\n{\n  \"subject\": \"Solving the coordination errors between your booking and box office teams\",\n  \"body\": \"<p>Hi Sarah,</p><p>This is an AI-generated analysis of your consultation. Just hit \\\"reply\\\" on this email if you want to get in touch with Jake.</p><p>You mentioned that <strong>miscommunication between booking and box office is causing finger-pointing and promoter disputes</strong>. You also described how fragmented spreadsheets mean your team spends hours just figuring out what's happening with each show.</p><h3>What solving this would mean for your venue:</h3><p>Based on what you shared, fixing these coordination issues would:</p><ul><li>End the finger-pointing between departments you described</li><li>Prevent the promoter payment disputes that damage relationships</li><li>Stop patron confusion from conflicting show information</li><li>Free your team to focus on booking better shows instead of hunting for information</li></ul><h3>Solutions tailored to your challenges:</h3><ul><li><strong>Unified Show Dashboard:</strong> Since you mentioned 'everyone has different spreadsheets,' this creates one source of truth accessible to all departments, eliminating the coordination errors you described</li><li><strong>Automated Settlement Reports:</strong> You said post-show reporting takes hours - this generates instant, accurate reports for promoters, preventing the disputes you're experiencing</li><li><strong>Smart Task Coordination:</strong> Addresses the 'who's supposed to do what' confusion by automatically assigning and tracking show tasks through your existing Slack</li></ul><h3>Ready to eliminate these friction points?</h3><p>I've analyzed your specific challenges and identified practical solutions that address the exact problems you described. Book a free strategy consult to see what next steps are for your business.</p><p><strong>Book your free 30-minute strategy call:</strong></p><p><a href=\\\"https://calendar.app.google/qbK3RubMSbwnZjd57\\\">Click here to schedule with Jake →</a></p><p>During your call, you'll explore:</p><ul><li>Which solution addresses your most pressing pain point first</li><li>How to implement without disrupting current operations</li><li>What similar 5-person venues have achieved</li><li>Practical next steps for your specific situation</li></ul><p>Best regards,<br>Great Blue Consulting AI Assistant</p>\"\n}\n```\n\n## Critical Instructions\n- ALWAYS output valid JSON\n- NEVER promise specific percentages, hours saved, or dollar amounts\n- NEVER make up benefits they didn't mention\n- ALWAYS use their exact problem descriptions from the conversation\n- Focus on eliminating problems rather than generic \"saving time\"\n- Frame everything in terms of THEIR stated challenges and desired outcomes\n- Output HTML-formatted text in the body field\n- Keep the entire response as a single JSON object\n- Escape any quotes within the text using `\\\"`\n- Personalize with specific problems/desires from their conversation\n- Ensure all HTML tags are properly closed\n- Use proper HTML entities (&amp;, &lt;, &gt;) when needed\n- ALWAYS include the calendar link: https://calendar.app.google/qbK3RubMSbwnZjd57\n- Make the CTA focused on solving their specific problems",
+              "role": "system"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        224,
+        0
+      ],
+      "id": "e5f378d7-9310-49e2-a019-f5bf87e20e49",
+      "name": "Draft email",
+      "credentials": {
+        "openAiApi": {
+          "id": "Zp5XBxiSIkbTZOZq",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "consultation",
+        "options": {}
+      },
+      "id": "05dc3d05-3c8d-4b7a-9bf4-74ff9ddf2811",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "consultation"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.formData.email }}",
+        "subject": "={{ $json.choices[0].message.content.subject }}",
+        "message": "={{ $json.choices[0].message.content.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        576,
+        0
+      ],
+      "id": "e87dd061-c119-408d-a9db-c9a7da7e60d9",
+      "name": "Send a message",
+      "webhookId": "e80f7778-a4d5-4786-8c70-a1c79d2c73fc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "7wuW9lruYdn4muWb",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1O9IZHYwPwMcGa9mUBtVr9pqMtJlmJ62i0QRjMKMXsr8",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O9IZHYwPwMcGa9mUBtVr9pqMtJlmJ62i0QRjMKMXsr8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1O9IZHYwPwMcGa9mUBtVr9pqMtJlmJ62i0QRjMKMXsr8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Webhook').item.json.body.formData.name }}",
+            "Email": "={{ $('Webhook').item.json.body.formData.email }}",
+            "Company": "={{ $('Webhook').item.json.body.formData.company }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        784,
+        0
+      ],
+      "id": "81661ca8-5472-40e5-9e13-ee6f826007ed",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JYtL1uAEnUABvtex",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Draft email": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Draft email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "21aea549-413e-4561-b68c-5981bae99ccb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6798be6417803ebb2ffecc6857310223ebdfcfb2febc8d79ef14931c96361404"
+  },
+  "id": "vWFESu6LAwkesmGn",
+  "tags": []
+}
