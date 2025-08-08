@@ -121,10 +121,10 @@ export default function AICapabilities() {
               onMouseLeave={() => setHoveredCard(null)}
             >
               {/* Card with flip effect on hover */}
-              <div className="relative h-full min-h-[320px] transform transition-all duration-500 preserve-3d hover:rotate-y-180">
+              <div className="relative h-full min-h-[320px] transform transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
                 
                 {/* Front of card */}
-                <div className="absolute inset-0 backface-hidden">
+                <div className="absolute inset-0 [backface-visibility:hidden]">
                   <div className="h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-8 flex flex-col">
                     {/* Icon and Title */}
                     <div className="flex items-start mb-4">
@@ -147,7 +147,7 @@ export default function AICapabilities() {
                 </div>
                 
                 {/* Back of card */}
-                <div className="absolute inset-0 rotate-y-180 backface-hidden">
+                <div className="absolute inset-0 [transform:rotateY(180deg)] [backface-visibility:hidden]">
                   <div className="h-full bg-gradient-to-br from-[#23A6B5] to-[#1E3A5F] rounded-2xl shadow-2xl p-8 text-white overflow-y-auto">
                     <h4 className="text-xl font-bold mb-4">Real Examples:</h4>
                     <div className="space-y-4">
@@ -170,37 +170,17 @@ export default function AICapabilities() {
           <p className="text-lg text-gray-600 mb-6">
             Every business is different. Let's talk about your specific challenges.
           </p>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-[#23A6B5] rounded-full hover:bg-[#1A8A94] transition-all duration-200 transform hover:scale-105"
           >
             Talk to My AI Assistant
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7l4-4m0 0l4 4m-4-4v18" />
             </svg>
-          </a>
+          </button>
         </div>
       </div>
-      
-      {/* Add CSS for 3D transforms */}
-      <style jsx>{`
-        .preserve-3d {
-          transform-style: preserve-3d;
-        }
-        .rotate-y-180 {
-          transform: rotateY(180deg);
-        }
-        .backface-hidden {
-          backface-visibility: hidden;
-        }
-        .group:hover .hover\\:rotate-y-180 {
-          transform: rotateY(180deg);
-        }
-      `}</style>
     </section>
   );
 }
