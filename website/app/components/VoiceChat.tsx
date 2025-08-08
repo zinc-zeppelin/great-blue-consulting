@@ -121,15 +121,14 @@ export default function VoiceChat() {
       {/* Content */}
       <div className="relative z-10 text-center px-4">
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-          <span className="block">Hi, I'm Jake.</span>
+          <span className="block">Talk to My AI Assistant</span>
           <span className="block bg-gradient-to-r from-[#4FC3D1] via-white to-[#23A6B5] bg-clip-text text-transparent">
             Let's Fix Your Chaos
           </span>
         </h1>
         
         <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto">
-          Director of AI Strategy helping small teams achieve big results.
-          Talk to my AI assistant - no forms, just conversation.
+          Quick conversation. Custom AI solutions. Delivered to your inbox.
         </p>
 
         {status === 'idle' ? (
@@ -158,8 +157,8 @@ export default function VoiceChat() {
                   <div
                     key={i}
                     className={`w-2 rounded-full transition-all duration-300 ${
-                      status === 'speaking' ? 'bg-green-500 animate-voice-bar' : 
-                      status === 'listening' ? 'bg-blue-500' : 
+                      status === 'speaking' ? 'bg-[#23A6B5] animate-voice-bar' : 
+                      status === 'listening' ? 'bg-[#4FC3D1]' : 
                       'bg-gray-300'
                     }`}
                     style={{

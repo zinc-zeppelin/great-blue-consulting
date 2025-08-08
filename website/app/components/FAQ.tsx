@@ -7,14 +7,6 @@ export default function FAQ() {
 
   const faqs = [
     {
-      question: "Why should I trust Jake with my business automation?",
-      answer: "As Director of AI Strategy at a cybersecurity company, I implement these same solutions at enterprise scale every day. I bring that expertise to small businesses, minus the enterprise complexity and cost. Plus, I'm based right here in Portland, Maine - you can actually meet me in person."
-    },
-    {
-      question: "What's Jake's background?",
-      answer: "I lead AI strategy for customer experience at a major cybersecurity firm, where I've implemented transformations that have saved millions in operational costs. I've seen what works (and what doesn't) across hundreds of implementations. When I'm not working, I'm hiking Maine trails with my dog or playing chess."
-    },
-    {
       question: "How quickly can I see results?",
       answer: "Most businesses see initial improvements within 2-4 weeks. Quick wins like automated responses can happen in days. Full workflow transformations typically take 4-8 weeks. I focus on getting you early wins while building toward bigger transformations."
     },

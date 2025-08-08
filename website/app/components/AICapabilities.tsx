@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function AICapabilities() {
-  const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   const capabilities = [
     {
@@ -101,7 +101,7 @@ export default function AICapabilities() {
   ];
 
   return (
-    <section className="py-20 bg-white" id="capabilities">
+    <section className="py-20 bg-gray-50" id="capabilities">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -112,59 +112,53 @@ export default function AICapabilities() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-6">
           {capabilities.map((capability, index) => (
-            <div key={index} className="relative overflow-hidden rounded-2xl bg-gray-50 hover:bg-[#23A6B5]/5 border border-gray-200 hover:border-[#23A6B5] transition-all duration-300">
-              <div className="p-8">
-                {/* Icon and Title */}
-                <div className="flex items-start mb-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-[#23A6B5]/10 rounded-lg flex items-center justify-center text-[#23A6B5] mr-4">
-                    {capability.icon}
+            <div 
+              key={index} 
+              className="group relative"
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+            >
+              {/* Card with flip effect on hover */}
+              <div className="relative h-full min-h-[320px] transform transition-all duration-500 preserve-3d hover:rotate-y-180">
+                
+                {/* Front of card */}
+                <div className="absolute inset-0 backface-hidden">
+                  <div className="h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 p-8 flex flex-col">
+                    {/* Icon and Title */}
+                    <div className="flex items-start mb-4">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#23A6B5] to-[#4FC3D1] rounded-lg flex items-center justify-center text-white mr-4">
+                        {capability.icon}
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 flex-1">{capability.title}</h3>
+                    </div>
+                    
+                    <p className="text-gray-600 text-lg mb-6 flex-grow">{capability.description}</p>
+                    
+                    {/* Hover indicator */}
+                    <div className="flex items-center text-[#23A6B5] font-medium">
+                      <span>Hover to see examples</span>
+                      <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 flex-1">{capability.title}</h3>
                 </div>
                 
-                <p className="text-gray-600 text-lg mb-6">{capability.description}</p>
-                
-                {/* Expandable Examples Button - Much more obvious */}
-                <button
-                  onClick={() => setExpandedCard(expandedCard === index ? null : index)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${
-                    expandedCard === index 
-                      ? 'bg-[#23A6B5] text-white' 
-                      : 'bg-[#23A6B5]/10 text-[#23A6B5] hover:bg-[#23A6B5]/20'
-                  }`}
-                >
-                  <span className="font-semibold">
-                    {expandedCard === index ? 'Hide Examples' : 'See Real Examples'}
-                  </span>
-                  <div className="flex items-center">
-                    <span className="text-sm mr-2">
-                      {expandedCard === index ? 'Click to close' : 'Click to expand'}
-                    </span>
-                    <svg 
-                      className={`w-5 h-5 transform transition-transform duration-200 ${
-                        expandedCard === index ? 'rotate-180' : ''
-                      }`} 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-                </button>
-                
-                {/* Examples Content */}
-                <div className={`mt-6 space-y-4 overflow-hidden transition-all duration-500 ${
-                  expandedCard === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                }`}>
-                  {capability.examples.map((example, exIdx) => (
-                    <div key={exIdx} className="bg-white rounded-lg p-4 border-l-4 border-[#23A6B5]">
-                      <h4 className="font-semibold text-gray-900 mb-2">{example.title}</h4>
-                      <p className="text-gray-600">{example.description}</p>
+                {/* Back of card */}
+                <div className="absolute inset-0 rotate-y-180 backface-hidden">
+                  <div className="h-full bg-gradient-to-br from-[#23A6B5] to-[#1E3A5F] rounded-2xl shadow-2xl p-8 text-white overflow-y-auto">
+                    <h4 className="text-xl font-bold mb-4">Real Examples:</h4>
+                    <div className="space-y-4">
+                      {capability.examples.map((example, exIdx) => (
+                        <div key={exIdx} className="border-l-4 border-[#4FC3D1] pl-4">
+                          <h5 className="font-semibold text-[#4FC3D1] mb-1">{example.title}</h5>
+                          <p className="text-white/90 text-sm">{example.description}</p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -177,16 +171,36 @@ export default function AICapabilities() {
             Every business is different. Let's talk about your specific challenges.
           </p>
           <a
-            href="#cta"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-[#23A6B5] rounded-full hover:bg-[#1A8A94] transition-all duration-200 transform hover:scale-105"
           >
-            Tell Me About Your Chaos
+            Talk to My AI Assistant
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7l4-4m0 0l4 4m-4-4v18" />
             </svg>
           </a>
         </div>
       </div>
+      
+      {/* Add CSS for 3D transforms */}
+      <style jsx>{`
+        .preserve-3d {
+          transform-style: preserve-3d;
+        }
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+        .backface-hidden {
+          backface-visibility: hidden;
+        }
+        .group:hover .hover\\:rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+      `}</style>
     </section>
   );
 }
