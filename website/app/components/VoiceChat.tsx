@@ -128,7 +128,7 @@ export default function VoiceChat() {
         </h1>
         
         <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto">
-          Quick assessment. Custom automation plan. Emailed right after.
+          Quick assessment. Custom plan. Right to your inbox.
         </p>
 
         {status === 'idle' ? (

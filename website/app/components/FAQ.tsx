@@ -20,7 +20,7 @@ export default function FAQ() {
     },
     {
       question: "How do you charge?",
-      answer: "I start with a free consultation to understand your needs. Then I provide transparent, project-based pricing. No long-term contracts, no surprise fees. Most projects range from $5K-25K depending on complexity, with clear deliverables and timelines."
+      answer: "I start with a free consultation to understand your needs. Then I provide transparent, project-based pricing. No long-term contracts, no surprise fees. Every project is scoped with clear deliverables and timelines based on your specific requirements."
     },
     {
       question: "Can you work with my existing tools?",
