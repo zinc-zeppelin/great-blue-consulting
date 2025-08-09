@@ -129,42 +129,44 @@ export default function AICapabilities() {
               className="relative"
             >
               {isMobile ? (
-                // Mobile: Click to expand/collapse
-                <div className="bg-white rounded-2xl shadow-lg p-6">
-                  <div className="flex items-start mb-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#23A6B5] to-[#4FC3D1] rounded-lg flex items-center justify-center text-white mr-4">
-                      {capability.icon}
+                // Mobile: Click anywhere on card to expand/collapse
+                <div 
+                  onClick={() => setFlippedCard(flippedCard === index ? null : index)}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-xl"
+                >
+                  <div className="p-6">
+                    <div className="flex items-start mb-4">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#23A6B5] to-[#4FC3D1] rounded-lg flex items-center justify-center text-white mr-4">
+                        {capability.icon}
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 flex-1">{capability.title}</h3>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 flex-1">{capability.title}</h3>
+                    
+                    <p className="text-gray-600 mb-4">{capability.description}</p>
+                    
+                    {flippedCard === index && (
+                      <div className="space-y-3 animate-fadeIn mb-4">
+                        {capability.examples.map((example, exIdx) => (
+                          <div key={exIdx} className="border-l-4 border-[#23A6B5] pl-3 py-1">
+                            <h5 className="font-semibold text-[#1E3A5F] text-sm">{example.title}</h5>
+                            <p className="text-gray-600 text-sm">{example.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   
-                  <p className="text-gray-600 mb-4">{capability.description}</p>
-                  
-                  <button
-                    onClick={() => setFlippedCard(flippedCard === index ? null : index)}
-                    className="w-full py-2 px-4 bg-[#23A6B5]/10 text-[#23A6B5] rounded-lg font-medium flex items-center justify-between"
-                  >
-                    <span>{flippedCard === index ? 'Hide Examples' : 'See Examples'}</span>
+                  {/* Visual indicator bar at bottom */}
+                  <div className="bg-[#23A6B5]/10 px-6 py-3 flex items-center justify-center">
                     <svg 
-                      className={`w-5 h-5 transform transition-transform ${flippedCard === index ? 'rotate-180' : ''}`}
+                      className={`w-5 h-5 text-[#23A6B5] transform transition-transform duration-200 ${flippedCard === index ? 'rotate-180' : ''}`}
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
-                  </button>
-                  
-                  {flippedCard === index && (
-                    <div className="mt-4 space-y-3 animate-fadeIn">
-                      {capability.examples.map((example, exIdx) => (
-                        <div key={exIdx} className="border-l-4 border-[#23A6B5] pl-3 py-1">
-                          <h5 className="font-semibold text-[#1E3A5F] text-sm">{example.title}</h5>
-                          <p className="text-gray-600 text-sm">{example.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  </div>
                 </div>
               ) : (
                 // Desktop: Hover to flip
