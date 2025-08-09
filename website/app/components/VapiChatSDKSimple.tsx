@@ -91,7 +91,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                     {message.role === 'user' ? 'You' : 'AI Consultant'}
                   </p>
                   <p className={`inline-block px-4 py-2 rounded-lg ${
-                    message.role === 'user' ? 'bg-blue-100 text-blue-900' : 'bg-green-100 text-green-900'
+                    message.role === 'user' ? 'bg-gray-100 text-gray-900' : 'bg-[#23A6B5]/10 text-[#1E3A5F]'
                   }`}>
                     {message.text}
                   </p>
@@ -113,7 +113,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent"
                   />
                 </div>
                 
@@ -124,7 +124,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent"
                   />
                 </div>
                 
@@ -135,7 +135,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                     required
                     value={formData.company}
                     onChange={(e) => setFormData({...formData, company: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent"
                   />
                 </div>
                 
@@ -145,7 +145,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                   className={`w-full py-3 px-6 text-white font-semibold rounded-lg transition duration-200 ${
                     isSubmitting 
                       ? 'bg-gray-400 cursor-not-allowed' 
-                      : 'bg-green-600 hover:bg-green-700'
+                      : 'bg-[#23A6B5] hover:bg-[#1A8A94]'
                   }`}
                 >
                   {isSubmitting ? 'Sending...' : 'Email Me AI Insights & Ideas'}
@@ -153,7 +153,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
               </form>
               
               {submitStatus === 'success' && (
-                <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                <div className="mt-4 p-4 bg-[#23A6B5]/10 border border-[#23A6B5] text-[#1E3A5F] rounded-lg">
                   <p className="font-semibold">Success!</p>
                   <p className="text-sm">Your AI insights are being prepared and will be emailed to you shortly.</p>
                 </div>

@@ -3,6 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-teal: #23A6B5;
+  --color-teal-light: #4FC3D1;
+  --color-teal-dark: #1A8A94;
+  --color-blue-deep: #1E3A5F;
+  --color-gray-soft: #F8F9FA;
 }
 
 @theme inline {
@@ -10,6 +15,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-primary: var(--color-teal);
+  --color-primary-light: var(--color-teal-light);
+  --color-primary-dark: var(--color-teal-dark);
 }
 
 @media (prefers-color-scheme: dark) {

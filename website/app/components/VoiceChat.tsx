@@ -102,7 +102,7 @@ export default function VoiceChat() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-blue-600 to-green-500">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#23A6B5] via-[#1E3A5F] to-[#4FC3D1]">
         <div 
           className="absolute inset-0 opacity-30"
           style={{
@@ -113,23 +113,22 @@ export default function VoiceChat() {
       
       {/* Floating shapes */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
-        <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
-        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#23A6B5] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
+        <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-[#4FC3D1] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-[#1A8A94] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-4">
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-          <span className="block">Your AI Business</span>
-          <span className="block bg-gradient-to-r from-yellow-200 via-green-200 to-blue-200 bg-clip-text text-transparent">
-            Consultant is Ready
+          <span className="block">From Chaos to Clarity</span>
+          <span className="block bg-gradient-to-r from-[#4FC3D1] via-white to-[#23A6B5] bg-clip-text text-transparent">
+            In One Conversation
           </span>
         </h1>
         
         <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto">
-          Get instant AI-powered insights for your business. 
-          No forms, no waiting - just start talking.
+          Discover how AI can transform your business in 15 minutes.
         </p>
 
         {status === 'idle' ? (
@@ -138,7 +137,7 @@ export default function VoiceChat() {
             className="group relative inline-flex items-center justify-center px-12 py-6 text-xl font-semibold text-gray-900 transition-all duration-200 transform hover:scale-105"
           >
             <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-full shadow-2xl group-hover:shadow-3xl transition-all duration-200" />
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 rounded-full opacity-75 blur group-hover:opacity-100 transition-opacity duration-200" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#23A6B5] via-[#4FC3D1] to-[#1A8A94] rounded-full opacity-75 blur group-hover:opacity-100 transition-opacity duration-200" />
             <div className="relative flex items-center space-x-3">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
@@ -158,8 +157,8 @@ export default function VoiceChat() {
                   <div
                     key={i}
                     className={`w-2 rounded-full transition-all duration-300 ${
-                      status === 'speaking' ? 'bg-green-500 animate-voice-bar' : 
-                      status === 'listening' ? 'bg-blue-500' : 
+                      status === 'speaking' ? 'bg-[#23A6B5] animate-voice-bar' : 
+                      status === 'listening' ? 'bg-[#4FC3D1]' : 
                       'bg-gray-300'
                     }`}
                     style={{
