@@ -29,6 +29,18 @@ export default function FAQ() {
     {
       question: "What if I'm not in Portland?",
       answer: "While I'm based in Portland and love working with local New England businesses, I work with companies nationwide. We can do everything remotely, though if you're local, I'm happy to meet in person at my favorite Portland coffee shop."
+    },
+    {
+      question: "How do you protect my business information?",
+      answer: "Your data security is paramount. All conversations are processed in real-time and not stored permanently. Email communications are encrypted, and I never share your business information with third parties. The AI analysis happens in isolated sessions that are cleared after each consultation."
+    },
+    {
+      question: "What happens after our AI conversation?",
+      answer: "Within minutes of our conversation, you'll receive a personalized email with your custom automation roadmap. This includes specific recommendations based on your exact pain points, implementation priorities, and next steps. Most clients are surprised by how detailed and actionable it is."
+    },
+    {
+      question: "Why AI instead of traditional consulting?",
+      answer: "AI lets me help more businesses faster and more affordably. The AI assistant can analyze your needs instantly, pattern-match against thousands of successful implementations, and deliver solutions in minutes instead of weeks. You get enterprise-level analysis at small business speed and pricing."
     }
   ];
 
