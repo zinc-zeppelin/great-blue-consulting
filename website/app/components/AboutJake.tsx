@@ -34,9 +34,9 @@ export default function AboutJake() {
               </p>
               
               <p>
-                Based in <strong className="text-[#23A6B5]">Portland, Maine</strong>, I help small businesses escape operational 
-                chaos without adding headcount. When I'm not designing AI workflows, you'll find me 
-                birding along the Maine coast, playing chess, or hiking with my dog.
+                Based in <strong className="text-[#23A6B5]">Portland, Maine</strong>, I help businesses throughout Maine and 
+                New England escape operational chaos without adding headcount. When I'm not designing AI workflows, you'll find me 
+                birding along the Maine coast, playing chess, or hiking local trails with my dog.
               </p>
               
               <p className="font-medium text-[#1E3A5F]">

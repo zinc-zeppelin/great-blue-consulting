@@ -29,6 +29,19 @@ export default function FAQ() {
     {
       question: "What if I'm not in Portland?",
       answer: "While I'm based in Portland and love working with local New England businesses, I work with companies nationwide. We can do everything remotely, though if you're local, I'm happy to meet in person at my favorite Portland coffee shop."
+    },
+    {
+      question: "How do you protect my business information?",
+      answer: "Your data security is paramount. All conversations are processed in real-time and not stored permanently. Email communications are encrypted, and I never share your business information with third parties. The AI analysis happens in isolated sessions that are cleared after each consultation."
+    },
+    {
+      question: "What happens after our AI conversation?",
+      answer: "Within minutes of our conversation, you'll receive a personalized email with your custom automation roadmap. This includes specific recommendations based on your exact pain points, implementation priorities, and next steps. Most clients are surprised by how detailed and actionable it is."
+    },
+    {
+      question: "How does this website work?",
+      answer: <><span>Curious about the tech behind this experience? I've built this entire system using cutting-edge AI and automation tools. </span><a href="/how-it-works" className="text-[#23A6B5] hover:text-[#1A8A94] underline">See the full technical breakdown →</a></>,
+      isJSX: true
     }
   ];
 
@@ -65,7 +78,9 @@ export default function FAQ() {
               </button>
               {openIndex === index && (
                 <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                  <p className="text-gray-700">{faq.answer}</p>
+                  <div className="text-gray-700">
+                    {typeof faq.answer === 'string' ? faq.answer : faq.answer}
+                  </div>
                 </div>
               )}
             </div>
