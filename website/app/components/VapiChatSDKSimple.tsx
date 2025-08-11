@@ -120,7 +120,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent text-black"
                   />
                 </div>
                 
@@ -131,7 +131,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent text-black"
                   />
                 </div>
                 
@@ -142,7 +142,7 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
                     required
                     value={formData.company}
                     onChange={(e) => setFormData({...formData, company: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#23A6B5] focus:border-transparent text-black"
                   />
                 </div>
                 
