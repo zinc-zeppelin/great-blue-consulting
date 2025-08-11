@@ -39,8 +39,9 @@ export default function FAQ() {
       answer: "Within minutes of our conversation, you'll receive a personalized email with your custom automation roadmap. This includes specific recommendations based on your exact pain points, implementation priorities, and next steps. Most clients are surprised by how detailed and actionable it is."
     },
     {
-      question: "Why AI instead of traditional consulting?",
-      answer: "AI lets me help more businesses faster and more affordably. The AI assistant can analyze your needs instantly, pattern-match against thousands of successful implementations, and deliver solutions in minutes instead of weeks. You get enterprise-level analysis at small business speed and pricing."
+      question: "How does this website work?",
+      answer: <><span>Curious about the tech behind this experience? I've built this entire system using cutting-edge AI and automation tools. </span><a href="/how-it-works" className="text-[#23A6B5] hover:text-[#1A8A94] underline">See the full technical breakdown →</a></>,
+      isJSX: true
     }
   ];
 
@@ -77,7 +78,9 @@ export default function FAQ() {
               </button>
               {openIndex === index && (
                 <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                  <p className="text-gray-700">{faq.answer}</p>
+                  <div className="text-gray-700">
+                    {typeof faq.answer === 'string' ? faq.answer : faq.answer}
+                  </div>
                 </div>
               )}
             </div>
