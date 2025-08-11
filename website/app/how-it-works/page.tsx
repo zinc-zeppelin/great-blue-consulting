@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import UnderTheHood from '../components/UnderTheHood';
 
 export const metadata = {
   title: 'How It Works - Great Blue AI | Portland, Maine',
