@@ -35,8 +35,8 @@ export default function FAQ() {
       answer: "Your data security is paramount. All conversations are processed in real-time and not stored permanently. Email communications are encrypted, and I never share your business information with third parties. The AI analysis happens in isolated sessions that are cleared after each consultation."
     },
     {
-      question: "What happens after our AI conversation?",
-      answer: "Within minutes of our conversation, you'll receive a personalized email with your custom automation roadmap. This includes specific recommendations based on your exact pain points, implementation priorities, and next steps. Most clients are surprised by how detailed and actionable it is."
+      question: "What happens after my AI conversation?",
+      answer: "Within seconds, you'll receive a personalized email with your custom automation roadmap AND a link to book a free strategy consultation with me (Jake) directly. We'll jump straight into implementing your AI solutions based on what the AI discovered about your business. No redundant discovery calls - we hit the ground running with your specific needs already mapped out."
     },
     {
       question: "How does this website work?",
