@@ -28,9 +28,9 @@ export default function AboutJake() {
             
             <div className="space-y-4 text-lg text-gray-700">
               <p>
-                As <strong className="text-[#23A6B5]">Director of AI Strategy for Customer Experience</strong> at a leading cybersecurity company, 
-                I know how to implement AI transformations that actually work. I've seen firsthand 
-                how the right automation can transform a drowning team into a thriving one.
+                I <strong className="text-[#23A6B5]">lead AI transformation across all customer experience</strong> at a leading cybersecurity company - 
+                support, services, implementations, customer success, and technical enablement. I know how to implement 
+                AI solutions that actually work because I do it every day at enterprise scale.
               </p>
               
               <p>

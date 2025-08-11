@@ -132,22 +132,27 @@ export default function VoiceChat() {
         </p>
 
         {status === 'idle' ? (
-          <button
-            onClick={startChat}
-            className="group relative inline-flex items-center justify-center px-12 py-6 text-xl font-semibold text-gray-900 transition-all duration-200 transform hover:scale-105"
-          >
-            <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-full shadow-2xl group-hover:shadow-3xl transition-all duration-200" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#23A6B5] via-[#4FC3D1] to-[#1A8A94] rounded-full opacity-75 blur group-hover:opacity-100 transition-opacity duration-200" />
-            <div className="relative flex items-center space-x-3">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-              <span>Start Talking</span>
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </div>
-          </button>
+          <div className="flex flex-col items-center">
+            <button
+              onClick={startChat}
+              className="group relative inline-flex items-center justify-center px-12 py-6 text-xl font-semibold text-gray-900 transition-all duration-200 transform hover:scale-105"
+            >
+              <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-full shadow-2xl group-hover:shadow-3xl transition-all duration-200" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#23A6B5] via-[#4FC3D1] to-[#1A8A94] rounded-full opacity-75 blur group-hover:opacity-100 transition-opacity duration-200" />
+              <div className="relative flex items-center space-x-3">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                <span>Start Talking</span>
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </button>
+            <p className="mt-3 text-white/80 text-sm">
+              No booking needed - just click and talk
+            </p>
+          </div>
         ) : (
           <div className="inline-flex items-center justify-center px-12 py-6 text-xl font-semibold">
             <div className="relative bg-white/90 backdrop-blur-sm rounded-full shadow-2xl px-8 py-4 flex items-center space-x-4">

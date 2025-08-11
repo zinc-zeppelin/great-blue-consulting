@@ -3,6 +3,7 @@ import AboutJake from './components/AboutJake';
 import HowItWorks from './components/HowItWorks';
 import AICapabilities from './components/AICapabilities';
 import FAQ from './components/FAQ';
+import UnderTheHood from './components/UnderTheHood';
 import CTA from './components/CTA';
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
         <HowItWorks />
         <AICapabilities />
         <FAQ />
+        <UnderTheHood />
         <CTA />
       </main>
       <footer className="bg-gray-900 text-white py-8">
