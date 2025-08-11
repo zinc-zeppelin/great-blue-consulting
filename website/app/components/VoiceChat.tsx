@@ -2,6 +2,15 @@
 
 import { useState, useEffect, useRef } from 'react';
 import VapiChatSDKSimple from './VapiChatSDKSimple';
+import { 
+  trackVoiceChatStart, 
+  trackVoiceChatConnected, 
+  trackVoiceChatEnded, 
+  trackVoiceChatError,
+  trackConversionStep,
+  trackTimeOnPage
+} from '../utils/analytics';
+import { useVisibilityTracking } from '../hooks/useVisibilityTracking';
 
 export default function VoiceChat() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -9,6 +18,11 @@ export default function VoiceChat() {
   const [conversation, setConversation] = useState<Array<{role: string, text: string}>>([]);
   const [showTranscript, setShowTranscript] = useState(false);
   const vapiRef = useRef<any>(null);
+  const startTimeRef = useRef<number>(0);
+  const pageLoadTimeRef = useRef<number>(Date.now());
+  
+  // Track section visibility
+  const sectionRef = useVisibilityTracking('voice_chat_hero');
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -19,11 +33,24 @@ export default function VoiceChat() {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    
+    // Track that voice chat section was viewed
+    trackConversionStep('viewed');
+    
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const startChat = async () => {
     setStatus('connecting');
+    
+    // Track time on page before starting conversation
+    const timeOnPage = Math.round((Date.now() - pageLoadTimeRef.current) / 1000);
+    trackTimeOnPage(timeOnPage, 'before_voice_chat');
+    
+    // Track voice chat start and conversion step
+    trackVoiceChatStart();
+    trackConversionStep('started');
+    startTimeRef.current = Date.now();
     
     try {
       const { default: Vapi } = await import('@vapi-ai/web');
@@ -34,11 +61,17 @@ export default function VoiceChat() {
       vapi.on('call-start', () => {
         console.log('Call started');
         setStatus('listening');
+        trackVoiceChatConnected();
       });
 
       vapi.on('call-end', () => {
         console.log('Call ended');
         setStatus('ended');
+        
+        // Track call duration
+        const duration = Math.round((Date.now() - startTimeRef.current) / 1000);
+        trackVoiceChatEnded(duration);
+        
         setTimeout(() => setShowTranscript(true), 500);
       });
 
@@ -68,6 +101,7 @@ export default function VoiceChat() {
       vapi.on('error', (error: any) => {
         console.error('Vapi error:', error);
         setStatus('ended');
+        trackVoiceChatError(error.message || 'Unknown error');
       });
 
       // Start the call with the assistant ID
@@ -76,6 +110,7 @@ export default function VoiceChat() {
     } catch (error) {
       console.error('Failed to start call:', error);
       setStatus('idle');
+      trackVoiceChatError('Failed to start call');
     }
   };
 
@@ -83,6 +118,11 @@ export default function VoiceChat() {
     if (vapiRef.current) {
       vapiRef.current.stop();
       setStatus('ended');
+      
+      // Track manual end of call
+      const duration = Math.round((Date.now() - startTimeRef.current) / 1000);
+      trackVoiceChatEnded(duration);
+      
       setTimeout(() => setShowTranscript(true), 500);
     }
   };
@@ -100,7 +140,7 @@ export default function VoiceChat() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#23A6B5] via-[#1E3A5F] to-[#4FC3D1]">
         <div 

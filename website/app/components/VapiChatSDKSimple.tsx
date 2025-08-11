@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { trackConversionStep } from '../utils/analytics';
 
 interface UserData {
   name: string;
@@ -27,6 +28,9 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
     if (initialConversation && initialConversation.length > 0) {
       setConversation(initialConversation);
     }
+    
+    // Track that form was viewed
+    trackConversionStep('form_viewed');
   }, [initialConversation]);
 
 
@@ -55,6 +59,9 @@ export default function VapiChatSDKSimple({ userData, onClose, initialConversati
       }
 
       setSubmitStatus('success');
+      
+      // Track successful form submission - THE ULTIMATE CONVERSION!
+      trackConversionStep('form_submitted');
       
       // Wait a moment to show success message
       setTimeout(() => {

@@ -1,11 +1,21 @@
-import Link from 'next/link';
+'use client';
 
-export const metadata = {
-  title: 'How It Works - Great Blue AI | Portland, Maine',
-  description: 'Discover the technology stack behind Great Blue AI. Learn how we use Vapi, n8n, and AI to transform your business.',
-};
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { trackEvent } from '../utils/analytics';
+import { useScrollTracking } from '../hooks/useScrollTracking';
 
 export default function HowItWorks() {
+  useScrollTracking();
+  
+  useEffect(() => {
+    // Track page view
+    trackEvent('how_it_works_view', {
+      event_category: 'engagement',
+      page_path: '/how-it-works'
+    });
+  }, []);
+  
   return (
     <>
       <main className="min-h-screen bg-gray-50">

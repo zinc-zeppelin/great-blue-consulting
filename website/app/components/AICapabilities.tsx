@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useVisibilityTracking } from '../hooks/useVisibilityTracking';
 
 export default function AICapabilities() {
   const [flippedCard, setFlippedCard] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const sectionRef = useVisibilityTracking('ai_capabilities_section');
 
   useEffect(() => {
     const checkMobile = () => {
@@ -111,7 +113,7 @@ export default function AICapabilities() {
   ];
 
   return (
-    <section className="py-20 bg-gray-50" id="capabilities">
+    <section ref={sectionRef} className="py-20 bg-gray-50" id="capabilities">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">

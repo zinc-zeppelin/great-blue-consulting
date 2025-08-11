@@ -1,10 +1,19 @@
 'use client';
 
 import Image from 'next/image';
+import { trackButtonClick } from '../utils/analytics';
+import { useVisibilityTracking } from '../hooks/useVisibilityTracking';
 
 export default function CTA() {
+  const sectionRef = useVisibilityTracking('cta_section');
+  
+  const handleClick = () => {
+    trackButtonClick('start_talking_cta', 'bottom_cta');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
   return (
-    <section className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20 bg-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="bg-gradient-to-r from-[#23A6B5] to-[#1E3A5F] rounded-3xl p-12 md:p-16 text-white relative overflow-hidden">
           {/* Background pattern */}
@@ -35,7 +44,7 @@ export default function CTA() {
             </p>
             
             <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={handleClick}
               className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-[#23A6B5] bg-white rounded-full hover:bg-gray-100 transition-all duration-200 transform hover:scale-105"
             >
               <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

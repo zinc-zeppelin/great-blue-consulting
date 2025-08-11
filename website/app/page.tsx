@@ -1,11 +1,16 @@
+'use client';
+
 import VoiceChat from './components/VoiceChat';
 import AboutJake from './components/AboutJake';
 import HowItWorks from './components/HowItWorks';
 import AICapabilities from './components/AICapabilities';
 import FAQ from './components/FAQ';
 import CTA from './components/CTA';
+import { useScrollTracking } from './hooks/useScrollTracking';
 
 export default function Home() {
+  useScrollTracking();
+  
   return (
     <>
       <main>

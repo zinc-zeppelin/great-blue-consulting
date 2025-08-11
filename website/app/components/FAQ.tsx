@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { trackFAQInteraction, trackButtonClick } from '../utils/analytics';
+import { useVisibilityTracking } from '../hooks/useVisibilityTracking';
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const sectionRef = useVisibilityTracking('faq_section');
 
   const faqs = [
     {
@@ -40,13 +43,26 @@ export default function FAQ() {
     },
     {
       question: "How does this website work?",
-      answer: <><span>Curious about the tech behind this experience? I've built this entire system using cutting-edge AI and automation tools. </span><a href="/how-it-works" className="text-[#23A6B5] hover:text-[#1A8A94] underline">See the full technical breakdown →</a></>,
+      answer: <><span>Curious about the tech behind this experience? I've built this entire system using cutting-edge AI and automation tools. </span><a href="/how-it-works" className="text-[#23A6B5] hover:text-[#1A8A94] underline" onClick={() => trackButtonClick('how_it_works_link', 'faq')}>See the full technical breakdown →</a></>,
       isJSX: true
     }
   ];
 
+  const handleToggle = (index: number) => {
+    const isOpening = openIndex !== index;
+    const question = faqs[index].question;
+    
+    if (isOpening) {
+      trackFAQInteraction(question, 'expand');
+    } else {
+      trackFAQInteraction(question, 'collapse');
+    }
+    
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
-    <section className="py-20 bg-white" id="faq">
+    <section ref={sectionRef} className="py-20 bg-white" id="faq">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -61,7 +77,7 @@ export default function FAQ() {
           {faqs.map((faq, index) => (
             <div key={index} className="border border-gray-200 rounded-lg overflow-hidden hover:border-[#23A6B5] transition-colors duration-200">
               <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                onClick={() => handleToggle(index)}
                 className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-[#23A6B5]/5 transition-colors duration-200"
               >
                 <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
