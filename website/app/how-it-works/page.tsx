@@ -52,7 +52,7 @@ export default function HowItWorks() {
                       2
                     </div>
                     <h3 className="font-bold text-lg mb-2">AI Analyzes</h3>
-                    <p className="text-gray-600">GPT-4 processes your specific pain points and matches them against proven automation patterns.</p>
+                    <p className="text-gray-600">GPT-4o Mini processes your specific pain points and matches them against proven automation patterns.</p>
                   </div>
                   
                   <div className="text-center">
@@ -88,9 +88,9 @@ export default function HowItWorks() {
                 
                 <TechCard
                   icon="🧠"
-                  name="OpenAI GPT-4"
+                  name="OpenAI GPT-4o Mini"
                   category="AI Analysis"
-                  description="The brain behind your custom recommendations. GPT-4 analyzes your unique situation and generates tailored automation strategies."
+                  description="The brain behind your custom recommendations. GPT-4o Mini analyzes your unique situation and generates tailored automation strategies."
                   features={["Pattern matching", "Custom solutions", "Business analysis", "Strategic recommendations"]}
                 />
                 
