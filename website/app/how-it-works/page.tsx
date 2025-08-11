@@ -52,7 +52,7 @@ export default function HowItWorks() {
                       2
                     </div>
                     <h3 className="font-bold text-lg mb-2">AI Analyzes</h3>
-                    <p className="text-gray-600">O4-mini processes your specific pain points and matches them against proven automation patterns.</p>
+                    <p className="text-gray-600">o4-mini processes your specific pain points and matches them against proven automation patterns.</p>
                   </div>
                   
                   <div className="text-center">
@@ -88,10 +88,10 @@ export default function HowItWorks() {
                 
                 <TechCard
                   icon="🧠"
-                  name="OpenAI O4-mini"
-                  category="AI Analysis"
-                  description="The brain behind your custom recommendations. O4-mini analyzes your unique situation and generates tailored automation strategies."
-                  features={["Pattern matching", "Custom solutions", "Business analysis", "Strategic recommendations"]}
+                  name="OpenAI o4-mini"
+                  category="Advanced Reasoning AI"
+                  description="The latest reasoning model that thinks step-by-step through your business challenges. o4-mini excels at complex problem-solving, providing more thoughtful and accurate automation strategies than traditional AI."
+                  features={["Multi-step reasoning", "Deeper analysis", "Higher accuracy", "Complex problem solving"]}
                 />
                 
                 <TechCard
